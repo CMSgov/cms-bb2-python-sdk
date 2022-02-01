@@ -63,6 +63,8 @@ Hello from BB2 SDK Class method!!!
 
 ## Developing the Blue Button 2.0 SDK (for BB2 devs)
 
+### Install Development
+
 To install with the tools you need to develop and run tests do the following:
 
 ```
@@ -74,4 +76,25 @@ To run the tests run the following commands:
 ```
 # From the src/ directory
 $ pytest
+```
+### Create Distribution
+
+To create a distribution run the following command:
+
+```
+$ python setup.py sdist
+```
+
+The resulting distribution files with be created in the `sdist/` directory.
+
+### Create Manifest
+
+Note that the previous distribution did not include the license.txt or test files. This requires creating a manifest.
+
+To create a MANIFEST.in file run the following commands:
+
+```
+$ pip install check-manifest  # If not already installed.
+$ check-manifest --create
+$ python setup.py sdist
 ```
