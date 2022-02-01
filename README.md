@@ -60,3 +60,11 @@ Type "help", "copyright", "credits" or "license" for more information.
 Hello from BB2 SDK Class method!!!
 >>> 
 ```
+
+## Developing the Blue Button 2.0 SDK (for BB2 devs)
+
+To install with the tools you need to develop and run tests do the following:
+
+```
+pip install -e .[dev]
+```
