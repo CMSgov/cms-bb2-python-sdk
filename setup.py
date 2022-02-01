@@ -33,7 +33,7 @@ setup(
     ],
     extras_require={
         "dev": [
-            "pytest >= 3.0",
+            "pytest >= 6.0",
         ],
     },
 )

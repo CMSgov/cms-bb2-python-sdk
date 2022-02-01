@@ -9,20 +9,20 @@ Introduction goes here!
 
 * Install Python for your environment and verify the version with:
   ```
-  python --version
+  $ python --version
   # or
-  python3 --version
+  $ python3 --version
   ```
   This should output a 3.x version number.
 
 * Install up to date versions of pip, setuptools and wheel:
   ```
-  python3 -m pip install --upgrade pip setuptools wheel
+  $ python3 -m pip install --upgrade pip setuptools wheel
   ```
 * Optionally you can use a virtual environment for the previous insall step via the following:
   ```
-  python -m venv bb2_env
-  source bb2_env/bin/activate
+  $ python -m venv bb2_env
+  $ source bb2_env/bin/activate
   # Perform install and commands after sourcing the venv.
   ```
 
@@ -34,7 +34,7 @@ To build the cms-bb2 package do the following:
 
   ```
   # From repository root directory:
-  python setup.py bdist_wheel
+  $ python setup.py bdist_wheel
   ```
 
 ## Installation
@@ -42,14 +42,14 @@ To build the cms-bb2 package do the following:
 To install the package locally do the following:
 ```
 # From repository root directory:
-pip install -e .
+$ pip install -e .
 ```
 
 ## Usage
 
 To test it out with Python interactively:
 ```
-[cms-bb2-python-sdk]$ python
+$ python
 Python 3.10.1 ...
 Type "help", "copyright", "credits" or "license" for more information.
 >>> from bb2 import Bb2
@@ -66,5 +66,12 @@ Hello from BB2 SDK Class method!!!
 To install with the tools you need to develop and run tests do the following:
 
 ```
-pip install -e .[dev]
+$ pip install -e .[dev]
+```
+
+To run the tests run the following commands:
+
+```
+# From the src/ directory
+$ pytest
 ```
