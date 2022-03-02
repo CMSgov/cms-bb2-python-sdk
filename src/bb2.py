@@ -17,6 +17,12 @@ class Bb2:
     name = "bb2"
     verbose_name = "Blue Button 2.0 SDK Package"
     
+    def __init__(self, config):
+        self.config = config
+
+    def get_config(self):
+        return self.config
+
     def hello(self):
         mesg = "Hello from BB2 SDK Class method!!!"
         print(mesg)
