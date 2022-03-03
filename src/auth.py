@@ -3,8 +3,8 @@ import hashlib
 import requests
 import random
 import string
+import datetime
 
-from datetime import datetime, timezone
 from requests_toolbelt import MultipartEncoder
 
 from bb2 import Bb2
@@ -38,7 +38,7 @@ class AuthRequest:
         if state != self.auth_data['state']:
             raise ValueError("Provided callback state does not match.")
 
-        self.auth_token = AuthorizationToken(self._get_access_token(code, state))
+        self.auth_token = AuthorizationToken(self._get_access_token(code))
 
         return self.auth_token
 
@@ -53,7 +53,7 @@ class AuthRequest:
         params = {
             'client_id': self.bb.get_config()['clientId'],
             'grant_type': 'refresh_token',
-            'refresh_token': self.refresh_token
+            'refresh_token': self.auth_token.refresh_token
         }
 
         token_response = requests.post(url=self.auth_token_url, params=params, auth=(self.bb.get_config().get('clientId'), self.bb.get_config().get('clientSecret')))
@@ -96,7 +96,7 @@ class AuthRequest:
             auth_data.update(self._generate_pkce_data())
         return auth_data
  
-    def _get_access_token(self, code, state):
+    def _get_access_token(self, code):
         params = {'client_id': self.bb.get_config()['clientId'],
                   'client_secret': self.bb.get_config()['clientSecret'],
                   'code':code,
@@ -110,7 +110,7 @@ class AuthRequest:
         token_response = requests.post(url=self.auth_token_url, data=mp_encoder, headers={'content-type':mp_encoder.content_type})
         if token_response.status_code == 200:
             token_json = token_response.json()
-            token_json['expires_at'] = datetime.datetime.now() + datetime.timedelta(seconds=token_json['expires_in'])
+            token_json['expires_at'] = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(seconds=token_json['expires_in'])
         else:
             raise Exception("Failed to get access token, status_code: {}, error: {}".format(token_response.status_code, token_response.content))
         return token_json
@@ -120,11 +120,11 @@ class AuthorizationToken:
     def __init__(self, auth_token):
         self.access_token = auth_token.get('access_token')
         self.expires_in = auth_token.get('expires_in')
-        self.expires_at = auth_token.get('expires_at') if auth_token.get('expires_at') else datetime.datetime.now(timezone.utc) + datetime.timedelta(seconds=self.expires_in)
+        self.expires_at = auth_token.get('expires_at') if auth_token.get('expires_at') else datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(seconds=self.expires_in)
         self.patient = auth_token.get('patient')
         self.refresh_token = auth_token.get('refresh_token')
         self.scope = auth_token.get('scope')
         self.token_type = auth_token.get('token_type')
 
     def access_token_expired(self):
-        return self.expires_at < datetime.now(timezone.utc)
+        return self.expires_at < datetime.datetime.now(datetime.timezone.utc)
