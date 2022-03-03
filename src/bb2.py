@@ -13,10 +13,11 @@ BB2_CONFIG = {
     "environment": "PRODUCTION"
 }
 
+
 class Bb2:
     name = "bb2"
     verbose_name = "Blue Button 2.0 SDK Package"
-    
+
     def __init__(self, config):
         self.config = config
 
