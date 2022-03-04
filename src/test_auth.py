@@ -7,20 +7,20 @@ from bb2 import Bb2
 from fixtures.token_response import TOKEN_RESPONSE, REFRESH_TOKEN_RESPONSE
 
 BB2_CONFIG_PKCE_V1 = {
-    "baseUrl": "https://sandbox.bluebutton.cms.gov",
-    "clientId": "foo",
-    "clientSecret": "bar",
-    "callbackUrl": "https://www.fake.com/",
+    "base_url": "https://sandbox.bluebutton.cms.gov",
+    "client_id": "foo",
+    "client_secret": "bar",
+    "callback_url": "https://www.fake.com/",
     "version": "1",
     "pkce": True,
     "environment": "PRODUCTION"
 }
 
 BB2_CONFIG_NO_PKCE_V2 = {
-    "baseUrl": "https://sandbox.bluebutton.cms.gov",
-    "clientId": "foo",
-    "clientSecret": "bar",
-    "callbackUrl": "https://www.fake.com/",
+    "base_url": "https://sandbox.bluebutton.cms.gov",
+    "client_id": "foo",
+    "client_secret": "bar",
+    "callback_url": "https://www.fake.com/",
     "version": "2",
     "pkce": False,
     "environment": "PRODUCTION"
@@ -36,7 +36,7 @@ def test_auth_url_w_pkce():
     parsed_url = urlparse(auth_url)
     assert parsed_url.path == "/v1/o/authorize"
     qps = parse_qs(parsed_url.query)
-    assert bb.get_config()['clientId'] in qps['client_id']
+    assert bb.get_config()['client_id'] in qps['client_id']
     assert authReq.auth_data['state'] in qps['state']
     assert authReq.auth_data['code_challenge'] in qps['code_challenge']
 
@@ -50,7 +50,7 @@ def test_auth_url_no_pkce():
     parsed_url = urlparse(auth_url)
     assert parsed_url.path == "/v2/o/authorize"
     qps = parse_qs(parsed_url.query)
-    assert bb.get_config()['clientId'] in qps['client_id']
+    assert bb.get_config()['client_id'] in qps['client_id']
     assert authReq.auth_data['state'] in qps['state']
     assert authReq.auth_data.get('code_challenge') is None
     assert not qps.get('code_challenge')

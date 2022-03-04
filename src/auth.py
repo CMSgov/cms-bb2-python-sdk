@@ -4,23 +4,22 @@ import requests
 import random
 import string
 import datetime
+import urllib
 
-from requests_toolbelt import MultipartEncoder
+from requests_toolbelt.multipart.encoder import MultipartEncoder
 
 from bb2 import Bb2
 
 BB2_AUTH_URL = "{}/v{}/o/authorize"
 BB2_TOKEN_URL = "{}/v{}/o/token"
-AUTH_URL_TEMPLATE = "{}?client_id={}&redirect_uri={}&state={}&response_type=code{}"
-AUTH_URL_PKCE_PARAMS = "&code_challenge_method=S256&code_challenge={}"
 
 
 class AuthRequest:
 
     def __init__(self, bb: Bb2):
         self.bb = bb
-        self.auth_base_url = BB2_AUTH_URL.format(bb.get_config()['baseUrl'], bb.get_config()['version'])
-        self.auth_token_url = BB2_TOKEN_URL.format(bb.get_config()['baseUrl'], bb.get_config()['version'])
+        self.auth_base_url = BB2_AUTH_URL.format(bb.get_config()['base_url'], bb.get_config()['version'])
+        self.auth_token_url = BB2_TOKEN_URL.format(bb.get_config()['base_url'], bb.get_config()['version'])
         self.auth_data = self._generate_authdata()
         self.auth_url = self._generate_authorize_url()
         self.auth_token = None
@@ -51,15 +50,15 @@ class AuthRequest:
             raise ValueError("Refresh token not available when calling refresh_access_token().")
 
         params = {
-            'client_id': self.bb.get_config()['clientId'],
+            'client_id': self.bb.get_config()['client_id'],
             'grant_type': 'refresh_token',
             'refresh_token': self.auth_token.refresh_token
         }
 
         token_response = requests.post(url=self.auth_token_url,
                                        params=params,
-                                       auth=(self.bb.get_config().get('clientId'),
-                                             self.bb.get_config().get('clientSecret')))
+                                       auth=(self.bb.get_config().get('client_id'),
+                                             self.bb.get_config().get('client_secret')))
 
         if token_response.status_code == 200:
             self.auth_token = AuthorizationToken(token_response.json())
@@ -70,11 +69,16 @@ class AuthRequest:
         return self.auth_token
 
     def _generate_authorize_url(self):
-        pkce_params = AUTH_URL_PKCE_PARAMS.format(self.auth_data['code_challenge']) if self.bb.get_config()['pkce'] else ""
-        return AUTH_URL_TEMPLATE.format(self.auth_base_url, self.bb.get_config()['clientId'],
-                                        self.bb.get_config()['callbackUrl'],
-                                        self.auth_data['state'],
-                                        pkce_params)
+        params = {'client_id' : self.bb.get_config()['client_id'],
+                  'redirect_uri' : self.bb.get_config()['callback_url'],
+                  'state' : self.auth_data['state'],
+                  'response_type' : 'code'}
+        
+        if self.bb.get_config().get('pkce'):
+            params['code_challenge_method'] = 'S256'
+            params['code_challenge'] = self.auth_data['code_challenge']
+
+        return self.auth_base_url + '?' + urllib.parse.urlencode(params, quote_via=urllib.parse.quote)
 
     def _base64_url_encode(self, buffer):
         buffer_bytes = base64.urlsafe_b64encode(buffer.encode("utf-8"))
@@ -101,11 +105,11 @@ class AuthRequest:
         return auth_data
 
     def _get_access_token(self, code):
-        params = {'client_id': self.bb.get_config()['clientId'],
-                  'client_secret': self.bb.get_config()['clientSecret'],
+        params = {'client_id': self.bb.get_config()['client_id'],
+                  'client_secret': self.bb.get_config()['client_secret'],
                   'code': code,
                   'grant_type': 'authorization_code',
-                  'redirect_uri': self.bb.get_config()['callbackUrl']}
+                  'redirect_uri': self.bb.get_config()['callback_url']}
         if (self.bb.get_config()['pkce']):
             params['code_verifier'] = self.auth_data['verifier']
             params['code_challenge'] = self.auth_data['code_challenge']

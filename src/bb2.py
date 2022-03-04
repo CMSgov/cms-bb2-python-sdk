@@ -4,10 +4,10 @@ Blue Button 2.0 SDK Class
 """
 
 BB2_CONFIG = {
-    "baseUrl": "https://sandbox.bluebutton.cms.gov",
-    "clientId": "foo",
-    "clientSecret": "bar",
-    "callbackUrl": "https://www.fake.com/",
+    "base_url": "https://sandbox.bluebutton.cms.gov",
+    "client_id": "7OaeX8qr7toQZJnc1YQk8TBSt4KXOnXTHm7UtwB0",
+    "client_secret": "DOy1nsLtwWYcsFOwRqOWnwKP5MzLfpt6krrWHdmDk0j7asCmbLq2u6oPazcJlF5PqOjYgftaifcbpeVmwZUBgqNkw5osn7qQIMUOFflb1OyJ8hhHrrMqCtWrnJHSqlCp",
+    "callback_url": "http://localhost:3001/api/bluebutton/callback/",
     "version": "1",
     "pkce": True,
     "environment": "PRODUCTION"
