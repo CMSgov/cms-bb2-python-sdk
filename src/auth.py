@@ -11,7 +11,7 @@ from requests_toolbelt.multipart.encoder import MultipartEncoder
 from bb2 import Bb2
 
 BB2_AUTH_URL = "{}/v{}/o/authorize"
-BB2_TOKEN_URL = "{}/v{}/o/token"
+BB2_TOKEN_URL = "{}/v{}/o/token/"
 
 
 class AuthRequest:
