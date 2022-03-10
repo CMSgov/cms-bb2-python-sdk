@@ -4,3 +4,4 @@ requests-toolbelt==0.9.1
 urllib3==1.26.8
 coverage==6.3.2
 pytest==7.0.1
+flake8==4.0.1

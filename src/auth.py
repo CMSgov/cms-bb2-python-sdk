@@ -69,11 +69,11 @@ class AuthRequest:
         return self.auth_token
 
     def _generate_authorize_url(self):
-        params = {'client_id' : self.bb.get_config()['client_id'],
-                  'redirect_uri' : self.bb.get_config()['callback_url'],
-                  'state' : self.auth_data['state'],
-                  'response_type' : 'code'}
-        
+        params = {'client_id': self.bb.get_config()['client_id'],
+                  'redirect_uri': self.bb.get_config()['callback_url'],
+                  'state': self.auth_data['state'],
+                  'response_type': 'code'}
+
         if self.bb.get_config().get('pkce'):
             params['code_challenge_method'] = 'S256'
             params['code_challenge'] = self.auth_data['code_challenge']
