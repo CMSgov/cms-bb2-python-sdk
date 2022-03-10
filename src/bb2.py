@@ -49,8 +49,10 @@ class Bb2:
     def _read_config_file(self):
         extension = pathlib.Path(self.config_file).suffix
 
-        if extension.lower() == ".json":
+        if extension == ".json":
             return self._read_json(self.config_file)
+        elif extension == ".yaml":
+            return self._read_yaml(self.config_file)
         else:
             raise ValueError(
                 "Error: Configuration file extension must be .json"
