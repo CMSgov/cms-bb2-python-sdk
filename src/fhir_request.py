@@ -4,7 +4,7 @@ import requests
 from requests.adapters import HTTPAdapter, Retry
 
 
-def fhirRequest(bb, config):
+def fhir_request(bb, config):
     auth_token = config["auth_token"]
     new_auth_token = handle_expired(bb, auth_token)
 
@@ -12,7 +12,7 @@ def fhirRequest(bb, config):
         auth_token = new_auth_token
 
     retry_config = Retry(
-        total=3, backoff_factor=0.2, status_forcelist=[500, 502, 503, 504]
+        total=3, backoff_factor=5, status_forcelist=[500, 502, 503, 504]
     )
     full_url = bb["base_url"] + "/v" + bb["version"] + config["url"]
     headers = {"Authorization": "Bearer " + auth_token["access_token"]}
