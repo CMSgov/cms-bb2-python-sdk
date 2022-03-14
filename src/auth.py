@@ -72,11 +72,9 @@ class AuthRequest:
         params = {'client_id': self.bb.get_config()['client_id'],
                   'redirect_uri': self.bb.get_config()['callback_url'],
                   'state': self.auth_data['state'],
-                  'response_type': 'code'}
-
-        if self.bb.get_config().get('pkce'):
-            params['code_challenge_method'] = 'S256'
-            params['code_challenge'] = self.auth_data['code_challenge']
+                  'response_type': 'code',
+                  'code_challenge_method': 'S256',
+                  'code_challenge': self.auth_data['code_challenge']}
 
         return self.auth_base_url + '?' + urllib.parse.urlencode(params, quote_via=urllib.parse.quote)
 
@@ -100,8 +98,7 @@ class AuthRequest:
 
     def _generate_authdata(self):
         auth_data = {"state": self._generate_random_state(32)}
-        if self.bb.get_config()['pkce']:
-            auth_data.update(self._generate_pkce_data())
+        auth_data.update(self._generate_pkce_data())
         return auth_data
 
     def _get_access_token(self, code):
@@ -109,10 +106,9 @@ class AuthRequest:
                   'client_secret': self.bb.get_config()['client_secret'],
                   'code': code,
                   'grant_type': 'authorization_code',
-                  'redirect_uri': self.bb.get_config()['callback_url']}
-        if (self.bb.get_config()['pkce']):
-            params['code_verifier'] = self.auth_data['verifier']
-            params['code_challenge'] = self.auth_data['code_challenge']
+                  'redirect_uri': self.bb.get_config()['callback_url'],
+                  'code_verifier': self.auth_data['verifier'],
+                  'code_challenge': self.auth_data['code_challenge']}
 
         mp_encoder = MultipartEncoder(params)
         token_response = requests.post(url=self.auth_token_url, data=mp_encoder,

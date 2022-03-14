@@ -9,7 +9,6 @@ BB2_CONFIG = {
     "client_secret": "bar",
     "callback_url": "http://localhost:3001/api/bluebutton/callback/",
     "version": "1",
-    "pkce": True,
     "environment": "PRODUCTION"
 }
 
