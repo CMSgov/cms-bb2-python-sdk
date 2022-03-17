@@ -60,11 +60,8 @@ class AuthRequest:
                                        auth=(self.bb.get_config().get('client_id'),
                                              self.bb.get_config().get('client_secret')))
 
-        if token_response.status_code == 200:
-            self.auth_token = AuthorizationToken(token_response.json())
-        else:
-            raise Exception("Failed to refresh access token, status_code: {}, error: {}".format(
-                token_response.status_code, token_response.content))
+        token_response.raise_for_status()
+        self.auth_token = AuthorizationToken(token_response.json())
 
         return self.auth_token
 
@@ -113,13 +110,11 @@ class AuthRequest:
         mp_encoder = MultipartEncoder(params)
         token_response = requests.post(url=self.auth_token_url, data=mp_encoder,
                                        headers={'content-type': mp_encoder.content_type})
-        if token_response.status_code == 200:
-            token_json = token_response.json()
-            token_json['expires_at'] = datetime.datetime.now(datetime.timezone.utc) + \
-                datetime.timedelta(seconds=token_json['expires_in'])
-        else:
-            raise Exception("Failed to get access token, status_code: {}, error: {}".format(token_response.status_code,
-                                                                                            token_response.content))
+        token_response.raise_for_status()
+        token_json = token_response.json()
+        token_json['expires_at'] = datetime.datetime.now(datetime.timezone.utc) + \
+            datetime.timedelta(seconds=token_json['expires_in'])
+
         return token_json
 
 
