@@ -25,7 +25,7 @@ setup(
         "Topic :: Software Development",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
-    py_modules=["bb2"],
+    py_modules=["blueButton"],
     package_dir={"": "src"},
     python_requires=">=3.6",
     install_requires=[

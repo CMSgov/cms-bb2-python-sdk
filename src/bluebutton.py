@@ -16,7 +16,7 @@ ENVIRONMENT_URLS = {
 }
 
 
-class Bb2:
+class BlueButton:
     name = "bb2"
     verbose_name = "Blue Button 2.0 SDK Package"
 
