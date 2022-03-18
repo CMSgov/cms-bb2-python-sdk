@@ -19,6 +19,11 @@ class Bb2:
 
     def __init__(self, config):
         self.config = config
+        self.client_id = config['client_id']
+        self.client_secret = config['client_secret']
+        self.callback_url = config['callback_url']
+        self.version = config['version']
+        self.base_url = config['base_url']
 
     def get_config(self):
         return self.config

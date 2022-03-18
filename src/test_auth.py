@@ -34,7 +34,7 @@ def test_auth_url_v1():
     parsed_url = urlparse(auth_url)
     assert parsed_url.path == "/v1/o/authorize"
     qps = parse_qs(parsed_url.query)
-    assert bb.get_config()['client_id'] in qps['client_id']
+    assert bb.client_id in qps['client_id']
     assert auth_req.auth_data['state'] in qps['state']
     assert auth_req.auth_data['code_challenge'] in qps['code_challenge']
 
@@ -48,7 +48,7 @@ def test_auth_url_v2():
     parsed_url = urlparse(auth_url)
     assert parsed_url.path == "/v2/o/authorize"
     qps = parse_qs(parsed_url.query)
-    assert bb.get_config()['client_id'] in qps['client_id']
+    assert bb.client_id in qps['client_id']
     assert auth_req.auth_data['state'] in qps['state']
     assert auth_req.auth_data.get('code_challenge') is not None
     assert qps.get('code_challenge')

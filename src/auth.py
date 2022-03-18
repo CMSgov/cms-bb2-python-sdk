@@ -18,8 +18,8 @@ class AuthRequest:
 
     def __init__(self, bb: Bb2):
         self.bb = bb
-        self.auth_base_url = BB2_AUTH_URL.format(bb.get_config()['base_url'], bb.get_config()['version'])
-        self.auth_token_url = BB2_TOKEN_URL.format(bb.get_config()['base_url'], bb.get_config()['version'])
+        self.auth_base_url = BB2_AUTH_URL.format(bb.base_url, bb.version)
+        self.auth_token_url = BB2_TOKEN_URL.format(bb.base_url, bb.version)
         self.auth_data = self._generate_authdata()
         self.auth_url = self._generate_authorize_url()
         self.auth_token = None
@@ -50,15 +50,15 @@ class AuthRequest:
             raise ValueError("Refresh token not available when calling refresh_access_token().")
 
         params = {
-            'client_id': self.bb.get_config()['client_id'],
+            'client_id': self.bb.client_id,
             'grant_type': 'refresh_token',
             'refresh_token': self.auth_token.refresh_token
         }
 
         token_response = requests.post(url=self.auth_token_url,
                                        params=params,
-                                       auth=(self.bb.get_config().get('client_id'),
-                                             self.bb.get_config().get('client_secret')))
+                                       auth=(self.bb.client_id,
+                                             self.bb.client_secret))
 
         token_response.raise_for_status()
         self.auth_token = AuthorizationToken(token_response.json())
@@ -66,8 +66,8 @@ class AuthRequest:
         return self.auth_token
 
     def _generate_authorize_url(self):
-        params = {'client_id': self.bb.get_config()['client_id'],
-                  'redirect_uri': self.bb.get_config()['callback_url'],
+        params = {'client_id': self.bb.client_id,
+                  'redirect_uri': self.bb.client_secret,
                   'state': self.auth_data['state'],
                   'response_type': 'code',
                   'code_challenge_method': 'S256',
@@ -99,11 +99,11 @@ class AuthRequest:
         return auth_data
 
     def _get_access_token(self, code):
-        params = {'client_id': self.bb.get_config()['client_id'],
-                  'client_secret': self.bb.get_config()['client_secret'],
+        params = {'client_id': self.bb.client_id,
+                  'client_secret': self.bb.client_secret,
                   'code': code,
                   'grant_type': 'authorization_code',
-                  'redirect_uri': self.bb.get_config()['callback_url'],
+                  'redirect_uri': self.bb.callback_url,
                   'code_verifier': self.auth_data['verifier'],
                   'code_challenge': self.auth_data['code_challenge']}
 
