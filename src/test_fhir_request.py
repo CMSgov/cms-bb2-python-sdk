@@ -1,7 +1,7 @@
 import datetime
 import unittest
 from unittest import mock
-from fhirRequest import fhirRequest
+from fhir_request import fhir_request
 
 
 class MockResponse:
@@ -63,7 +63,7 @@ class TestAPI(unittest.TestCase):
     def test_successful_fhir_request(self, get_request_mock):
         bb = generate_mock_bb()
         config = generate_mock_config()
-        response = fhirRequest(bb, config)
+        response = fhir_request(bb, config)
         self.assertEqual(response["auth_token"], None)
         self.assertEqual(response["response"].status_code, 200)
         self.assertEqual(response["response"].json()["id"], "-20140000010000")
@@ -73,7 +73,7 @@ class TestAPI(unittest.TestCase):
     def test_500_error_fhir_request(self, get_request_mock):
         bb = generate_mock_bb()
         config = generate_mock_config()
-        response = fhirRequest(bb, config)
+        response = fhir_request(bb, config)
         self.assertEqual(response["auth_token"], None)
         self.assertEqual(response["response"].status_code, 500)
         self.assertEqual(get_request_mock.call_count, 1)
@@ -82,7 +82,7 @@ class TestAPI(unittest.TestCase):
     def test_not_found_fhir_request(self, get_request_mock):
         bb = generate_mock_bb()
         config = generate_mock_config()
-        response = fhirRequest(bb, config)
+        response = fhir_request(bb, config)
         self.assertEqual(response["auth_token"], None)
         self.assertEqual(response["response"].status_code, 404)
         self.assertEqual(get_request_mock.call_count, 1)
