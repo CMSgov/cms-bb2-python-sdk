@@ -46,9 +46,6 @@ class AuthRequest:
 
     def refresh_access_token(self):
 
-        if self.auth_token.refresh_token is None:
-            raise ValueError("Refresh token not available when calling refresh_access_token().")
-
         params = {
             'client_id': self.bb.client_id,
             'grant_type': 'refresh_token',

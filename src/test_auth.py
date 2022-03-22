@@ -107,13 +107,6 @@ def test_refresh_access_token_without_refreshtoken():
         assert auth_req.auth_token.patient == TOKEN_RESPONSE.get("patient")
         assert auth_req.auth_token.expires_in == TOKEN_RESPONSE.get("expires_in")
 
-        with pytest.raises(ValueError) as err:
-            auth_req.auth_token.refresh_token = None
-            auth_req.refresh_access_token()
-
-        assert err is not None
-        assert "Refresh token not available when calling refresh_access_token()." in str(err)
-
 
 def test_refresh_access_token():
     bb = Bb2(BB2_CONFIG_V1)
