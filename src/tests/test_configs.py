@@ -1,6 +1,6 @@
 import pytest
 
-from bluebutton import BlueButton
+from cms_bluebutton import BlueButton
 
 
 CONFIGS_DIR = "src/tests/test_configs/"

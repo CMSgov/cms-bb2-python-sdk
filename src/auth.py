@@ -8,7 +8,7 @@ import urllib
 
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 
-from bb2 import Bb2
+from cms_bluebutton import BlueButton
 
 BB2_AUTH_URL = "{}/v{}/o/authorize"
 BB2_TOKEN_URL = "{}/v{}/o/token/"
@@ -16,7 +16,7 @@ BB2_TOKEN_URL = "{}/v{}/o/token/"
 
 class AuthRequest:
 
-    def __init__(self, bb: Bb2):
+    def __init__(self, bb: BlueButton):
         self.bb = bb
         self.auth_base_url = BB2_AUTH_URL.format(bb.base_url, bb.version)
         self.auth_token_url = BB2_TOKEN_URL.format(bb.base_url, bb.version)

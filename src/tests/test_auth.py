@@ -1,9 +1,9 @@
 import pytest
 import requests_mock
-
 from urllib.parse import urlparse, parse_qs
+
 from auth import AuthRequest
-from bb2 import Bb2
+from cms_bluebutton import BlueButton
 from fixtures.token_response import TOKEN_RESPONSE, REFRESH_TOKEN_RESPONSE
 
 BB2_CONFIG_V1 = {
@@ -26,7 +26,7 @@ BB2_CONFIG_V2 = {
 
 
 def test_auth_url_v1():
-    bb = Bb2(BB2_CONFIG_V1)
+    bb = BlueButton(BB2_CONFIG_V1)
     auth_req = AuthRequest(bb)
 
     auth_url = auth_req.get_authorize_url()
@@ -40,7 +40,7 @@ def test_auth_url_v1():
 
 
 def test_auth_url_v2():
-    bb = Bb2(BB2_CONFIG_V2)
+    bb = BlueButton(BB2_CONFIG_V2)
     auth_req = AuthRequest(bb)
 
     auth_url = auth_req.get_authorize_url()
@@ -56,7 +56,7 @@ def test_auth_url_v2():
 
 def test_authorize_callback_missing_ac():
     with pytest.raises(ValueError) as err:
-        bb = Bb2(BB2_CONFIG_V2)
+        bb = BlueButton(BB2_CONFIG_V2)
         auth_req = AuthRequest(bb)
         auth_req.authorize_callback(None, auth_req.auth_data.get("state"))
     assert err is not None
@@ -65,7 +65,7 @@ def test_authorize_callback_missing_ac():
 
 def test_authorize_callback_missing_state():
     with pytest.raises(ValueError) as err:
-        bb = Bb2(BB2_CONFIG_V2)
+        bb = BlueButton(BB2_CONFIG_V2)
         auth_req = AuthRequest(bb)
         auth_req.authorize_callback("ac", None)
     assert err is not None
@@ -74,7 +74,7 @@ def test_authorize_callback_missing_state():
 
 def test_authorize_callback_badstate():
     with pytest.raises(ValueError) as err:
-        bb = Bb2(BB2_CONFIG_V2)
+        bb = BlueButton(BB2_CONFIG_V2)
         auth_req = AuthRequest(bb)
         auth_req.authorize_callback("ac", "bad-state")
     assert err is not None
@@ -82,7 +82,7 @@ def test_authorize_callback_badstate():
 
 
 def test_authorize_callback():
-    bb = Bb2(BB2_CONFIG_V2)
+    bb = BlueButton(BB2_CONFIG_V2)
     auth_req = AuthRequest(bb)
     with requests_mock.Mocker() as mock:
         mock.post(auth_req.auth_token_url, json=TOKEN_RESPONSE)
@@ -96,7 +96,7 @@ def test_authorize_callback():
 
 
 def test_refresh_access_token_without_refreshtoken():
-    bb = Bb2(BB2_CONFIG_V1)
+    bb = BlueButton(BB2_CONFIG_V1)
     auth_req = AuthRequest(bb)
     with requests_mock.Mocker() as mock:
         mock.post(auth_req.auth_token_url, json=TOKEN_RESPONSE)
@@ -109,7 +109,7 @@ def test_refresh_access_token_without_refreshtoken():
 
 
 def test_refresh_access_token():
-    bb = Bb2(BB2_CONFIG_V1)
+    bb = BlueButton(BB2_CONFIG_V1)
     auth_req = AuthRequest(bb)
     with requests_mock.Mocker() as mock:
         mock.post(auth_req.auth_token_url, json=TOKEN_RESPONSE)
