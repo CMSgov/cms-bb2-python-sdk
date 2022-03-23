@@ -162,3 +162,7 @@ bb2_env/
 #.idea/
 
 # End of https://www.toptal.com/developers/gitignore/api/python
+#
+# BB2 ignores
+.bluebutton-config.json
+.bluebutton-config.yaml
