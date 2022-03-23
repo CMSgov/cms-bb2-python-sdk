@@ -1,25 +1,26 @@
-Blue Button 2.0 SDK - Python Version
-====================================
+# Blue Button 2.0 SDK - Python Version
 
 ## Introduction
 
 Introduction goes here!
 
-## Install Prerequisites: 
+## Install Prerequisites:
 
-* Install Python for your environment and verify the version with:
+- Install Python for your environment and verify the version with:
+
   ```
   $ python --version
   # or
   $ python3 --version
   ```
+
   This should output a 3.x version number.
 
-* Install up to date versions of pip, setuptools and wheel:
+- Install up to date versions of pip, setuptools and wheel:
   ```
   $ python3 -m pip install --upgrade pip setuptools wheel
   ```
-* Optionally you can use a virtual environment for the previous insall step via the following:
+- Optionally you can use a virtual environment for the previous insall step via the following:
   ```
   $ python -m venv bb2_env
   $ source bb2_env/bin/activate
@@ -30,7 +31,7 @@ Introduction goes here!
 
 To build the cms-bb2 package do the following:
 
-* Build the package:
+- Build the package:
 
   ```
   # From repository root directory:
@@ -40,6 +41,7 @@ To build the cms-bb2 package do the following:
 ## Installation
 
 To install the package locally do the following:
+
 ```
 # From repository root directory:
 $ pip install -e .
@@ -48,17 +50,18 @@ $ pip install -e .
 ## Usage
 
 To test it out with Python interactively:
+
 ```
 $ python
 Python 3.10.1 ...
 Type "help", "copyright", "credits" or "license" for more information.
 >>> from bb2 import Bb2
->>> 
+>>>
 >>> a = Bb2()
->>> 
+>>>
 >>> a.hello()
 Hello from BB2 SDK Class method!!!
->>> 
+>>>
 ```
 
 ## Developing the Blue Button 2.0 SDK (for BB2 devs)
@@ -71,12 +74,23 @@ To install with the tools you need to develop and run tests do the following:
 $ pip install -e .[dev]
 ```
 
-To run the tests run the following commands:
+To run the tests, use the following commands:
 
 ```
-# From the src/ directory
+# From the repo base directory
 $ pytest
 ```
+
+To run the tests with coverage, use the following commands:
+
+```
+# From the repo base directory
+$ coverage run -m pytest
+
+# Check report
+$ coverage report -m
+```
+
 ### Create Distribution
 
 To create a distribution run the following command:
