@@ -7,13 +7,12 @@ import os
 import pathlib
 import yaml
 
+from .constants import ENVIRONMENT_URLS, FHIR_RESOURCE_TYPE
+from .fhir_request import fhir_request
+
+
 ROOT_DIR = os.path.abspath(os.curdir) + "/"
 DEFAULT_CONFIG_FILE_LOCATION = ROOT_DIR + "./.bluebutton-config.json"
-
-ENVIRONMENT_URLS = {
-    "SANDBOX": "https://sandbox.bluebutton.cms.gov",
-    "PRODUCTION": "https://api.bluebutton.cms.gov",
-}
 
 
 class BlueButton:
@@ -83,3 +82,22 @@ class BlueButton:
         self.client_secret = config_dict.get("client_secret")
         self.callback_url = config_dict.get("callback_url")
         self.version = config_dict.get("version", 2)
+
+    def get_patient_data(self, config):
+        config["url"] = FHIR_RESOURCE_TYPE["Patient"]
+        return fhir_request(self, config)
+
+    def get_coverage_data(self, config):
+        config["url"] = FHIR_RESOURCE_TYPE["Coverage"]
+        return fhir_request(self, config)
+
+    def get_explaination_of_benefit_data(self, config):
+        config["url"] = FHIR_RESOURCE_TYPE["ExplanationOfBenefit"]
+        return fhir_request(self, config)
+
+    def get_profile_data(self, config):
+        config["url"] = FHIR_RESOURCE_TYPE["Profile"]
+        return fhir_request(self, config)
+
+    def get_custom_data(self, config):
+        return fhir_request(self, config)

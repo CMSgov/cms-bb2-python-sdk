@@ -14,7 +14,7 @@ def fhir_request(bb, config):
     retry_config = Retry(
         total=3, backoff_factor=5, status_forcelist=[500, 502, 503, 504]
     )
-    full_url = bb["base_url"] + "/v" + bb["version"] + config["url"]
+    full_url = bb.base_url + "/v" + bb.version + "/" + config["url"]
     headers = {"Authorization": "Bearer " + auth_token["access_token"]}
     headers[SDK_HEADER_KEY] = SDK_HEADER
     adapter = HTTPAdapter(max_retries=retry_config)
@@ -34,16 +34,16 @@ def handle_expired(bb, auth_token):
 
 
 def refresh_access_token(bb, refresh_token):
-    full_url = bb["base_url"] + "/v" + bb["version"] + REFRESH_TOKEN_ENDPOINT
+    full_url = bb.base_url + "/v" + bb.version + REFRESH_TOKEN_ENDPOINT
 
     params = {
-        "client_id": bb["client_id"],
+        "client_id": bb.client_id,
         "grant_type": "refresh_token",
         "refresh_token": refresh_token,
     }
 
     my_response = requests.post(
-        url=full_url, params=params, auth=(bb["client_id"], bb["client_secret"])
+        url=full_url, params=params, auth=(bb.client_id, bb.client_secret)
     )
     response_json = my_response.json()
     response_json["expires_at"] = datetime.datetime.now() + datetime.timedelta(
