@@ -5,8 +5,9 @@ import random
 import string
 import datetime
 import urllib
-
 from requests_toolbelt.multipart.encoder import MultipartEncoder
+
+from .constants import SDK_HEADER, SDK_HEADER_KEY
 
 
 class AuthorizationToken:
@@ -35,8 +36,15 @@ def refresh_auth_token(bb, auth_token):
         "refresh_token": auth_token.refresh_token,
     }
 
+    headers = {
+        SDK_HEADER_KEY: SDK_HEADER,
+    }
+
     token_response = requests.post(
-        url=bb.auth_token_url, data=data, auth=(bb.client_id, bb.client_secret)
+        url=bb.auth_token_url,
+        data=data,
+        headers=headers,
+        auth=(bb.client_id, bb.client_secret),
     )
 
     token_response.raise_for_status()
@@ -90,34 +98,8 @@ def generate_auth_data():
     return auth_data
 
 
-def generate_token_post_data(bb, auth_data, code):
-    params = {
-        "client_id": bb.client_id,
-        "client_secret": bb.client_secret,
-        "code": code,
-        "grant_type": "authorization_code",
-        "redirect_uri": bb.callback_url,
-        "code_verifier": auth_data["verifier"],
-        "code_challenge": auth_data["code_challenge"],
-    }
-
-    mp_encoder = MultipartEncoder(params)
-    token_response = requests.post(
-        url=bb.auth_token_url,
-        data=mp_encoder,
-        headers={"content-type": mp_encoder.content_type},
-    )
-    token_response.raise_for_status()
-    token_json = token_response.json()
-    token_json["expires_at"] = datetime.datetime.now(
-        datetime.timezone.utc
-    ) + datetime.timedelta(seconds=token_json["expires_in"])
-
-    return token_json
-
-
 def get_access_token_from_code(bb, auth_data, callback_code):
-    params = {
+    data = {
         "client_id": bb.client_id,
         "client_secret": bb.client_secret,
         "code": callback_code,
@@ -127,11 +109,11 @@ def get_access_token_from_code(bb, auth_data, callback_code):
         "code_challenge": auth_data["code_challenge"],
     }
 
-    mp_encoder = MultipartEncoder(params)
+    mp_encoder = MultipartEncoder(data)
     token_response = requests.post(
         url=bb.auth_token_url,
         data=mp_encoder,
-        headers={"content-type": mp_encoder.content_type},
+        headers={"content-type": mp_encoder.content_type, SDK_HEADER_KEY: SDK_HEADER},
     )
     token_response.raise_for_status()
     token_dict = token_response.json()
