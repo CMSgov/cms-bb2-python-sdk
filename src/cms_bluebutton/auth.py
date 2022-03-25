@@ -9,10 +9,6 @@ import urllib
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 
 
-BB2_AUTH_URL = "{}/v{}/o/authorize"
-BB2_TOKEN_URL = "{}/v{}/o/token/"
-
-
 class AuthorizationToken:
     def __init__(self, auth_token):
         self.access_token = auth_token.get("access_token")
@@ -33,14 +29,14 @@ class AuthorizationToken:
 
 
 def refresh_auth_token(bb, auth_token):
-    params = {
+    data = {
         "client_id": bb.client_id,
         "grant_type": "refresh_token",
         "refresh_token": auth_token.refresh_token,
     }
 
     token_response = requests.post(
-        url=bb.auth_token_url, params=params, auth=(bb.client_id, bb.client_secret)
+        url=bb.auth_token_url, data=data, auth=(bb.client_id, bb.client_secret)
     )
 
     token_response.raise_for_status()

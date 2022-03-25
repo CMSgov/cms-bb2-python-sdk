@@ -1,7 +1,7 @@
-import datetime
-from constants import REFRESH_TOKEN_ENDPOINT, SDK_HEADER, SDK_HEADER_KEY
 import requests
 from requests.adapters import HTTPAdapter, Retry
+
+from .constants import SDK_HEADER, SDK_HEADER_KEY
 
 
 def fhir_request(bb, config):
@@ -15,7 +15,7 @@ def fhir_request(bb, config):
         total=3, backoff_factor=5, status_forcelist=[500, 502, 503, 504]
     )
     full_url = bb.base_url + "/v" + bb.version + "/" + config["url"]
-    headers = {"Authorization": "Bearer " + auth_token["access_token"]}
+    headers = {"Authorization": "Bearer " + auth_token.access_token}
     headers[SDK_HEADER_KEY] = SDK_HEADER
     adapter = HTTPAdapter(max_retries=retry_config)
     sesh = requests.Session()
@@ -27,26 +27,7 @@ def fhir_request(bb, config):
 
 
 def handle_expired(bb, auth_token):
-    if datetime.datetime.now() > auth_token["expires_at"]:
-        return refresh_access_token(bb, auth_token["refresh_token"])
-
-    return None
-
-
-def refresh_access_token(bb, refresh_token):
-    full_url = bb.base_url + "/v" + bb.version + REFRESH_TOKEN_ENDPOINT
-
-    data = {
-        "client_id": bb.client_id,
-        "grant_type": "refresh_token",
-        "refresh_token": refresh_token,
-    }
-
-    my_response = requests.post(
-        url=full_url, data=data, auth=(bb.client_id, bb.client_secret)
-    )
-    response_json = my_response.json()
-    response_json["expires_at"] = datetime.datetime.now() + datetime.timedelta(
-        seconds=response_json["expires_in"]
-    )
-    return response_json
+    if auth_token.access_token_expired():
+        return bb.refresh_auth_token(bb, auth_token)
+    else:
+        return None

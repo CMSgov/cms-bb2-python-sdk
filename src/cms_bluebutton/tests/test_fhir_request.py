@@ -2,7 +2,7 @@ import datetime
 import unittest
 from unittest import mock
 
-from cms_bluebutton import BlueButton
+from cms_bluebutton import AuthorizationToken, BlueButton
 
 
 MOCK_BB_CONFIG = {
@@ -61,12 +61,12 @@ def not_found_fhir_request_mock(*args, **kwargs):
 def generate_mock_config():
     return {
         "params": {},
-        "auth_token": {
+        "auth_token": AuthorizationToken({
             "access_token": "fake_access_token",
             "refresh_token": "fake_refresh_token",
-            "expires_at": datetime.datetime.now() + datetime.timedelta(seconds=36000),
+            "expires_at": datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(seconds=36000),
             "patient": "-20140000010000",
-        },
+        }),
     }
 
 
