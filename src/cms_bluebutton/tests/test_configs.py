@@ -1,9 +1,9 @@
 import pytest
 
-from bluebutton import BlueButton
+from cms_bluebutton import BlueButton
 
 
-CONFIGS_DIR = "src/tests/test_configs/"
+CONFIGS_DIR = "tests/test_configs/"
 
 
 def test_invalid_file_extension():

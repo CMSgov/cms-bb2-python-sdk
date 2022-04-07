@@ -7,13 +7,18 @@ import os
 import pathlib
 import yaml
 
+from .auth import (
+    generate_auth_data,
+    generate_authorize_url,
+    get_authorization_token,
+    refresh_auth_token,
+)
+from .constants import ENVIRONMENT_URLS, FHIR_RESOURCE_TYPE
+from .fhir_request import fhir_request
+
+
 ROOT_DIR = os.path.abspath(os.curdir) + "/"
 DEFAULT_CONFIG_FILE_LOCATION = ROOT_DIR + "./.bluebutton-config.json"
-
-ENVIRONMENT_URLS = {
-    "SANDBOX": "https://sandbox.bluebutton.cms.gov",
-    "PRODUCTION": "https://api.bluebutton.cms.gov",
-}
 
 
 class BlueButton:
@@ -83,3 +88,36 @@ class BlueButton:
         self.client_secret = config_dict.get("client_secret")
         self.callback_url = config_dict.get("callback_url")
         self.version = config_dict.get("version", 2)
+        self.auth_base_url = "{}/v{}/o/authorize".format(self.base_url, self.version)
+        self.auth_token_url = "{}/v{}/o/token/".format(self.base_url, self.version)
+
+    def get_patient_data(self, config):
+        config["url"] = FHIR_RESOURCE_TYPE["Patient"]
+        return fhir_request(self, config)
+
+    def get_coverage_data(self, config):
+        config["url"] = FHIR_RESOURCE_TYPE["Coverage"]
+        return fhir_request(self, config)
+
+    def get_explaination_of_benefit_data(self, config):
+        config["url"] = FHIR_RESOURCE_TYPE["ExplanationOfBenefit"]
+        return fhir_request(self, config)
+
+    def get_profile_data(self, config):
+        config["url"] = FHIR_RESOURCE_TYPE["Profile"]
+        return fhir_request(self, config)
+
+    def get_custom_data(self, config):
+        return fhir_request(self, config)
+
+    def refresh_auth_token(self, auth_token):
+        return refresh_auth_token(self, auth_token)
+
+    def generate_auth_data(self):
+        return generate_auth_data()
+
+    def generate_authorize_url(self, auth_data):
+        return generate_authorize_url(self, auth_data)
+
+    def get_authorization_token(self, auth_data, callback_code, callback_state):
+        return get_authorization_token(self, auth_data, callback_code, callback_state)

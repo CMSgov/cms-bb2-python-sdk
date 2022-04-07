@@ -29,7 +29,7 @@ Introduction goes here!
 
 ## Build
 
-To build the cms-bb2 package do the following:
+To build the cms_bluebutton package do the following:
 
 - Build the package:
 
@@ -49,26 +49,15 @@ $ pip install -e .
 
 ## Usage
 
-To test it out with Python interactively:
+Usage goes here!
 
-```
-$ python
-Python 3.10.1 ...
-Type "help", "copyright", "credits" or "license" for more information.
->>> from bb2 import Bb2
->>>
->>> a = Bb2()
->>>
->>> a.hello()
-Hello from BB2 SDK Class method!!!
->>>
-```
-
-## Developing the Blue Button 2.0 SDK (for BB2 devs)
+## Developing the Blue Button 2.0 SDK (for BB2 team SDK developers)
 
 ### Install Development
 
 To install with the tools you need to develop and run tests do the following:
+
+From the repository base directory:
 
 ```
 $ pip install -e .[dev]
@@ -76,15 +65,23 @@ $ pip install -e .[dev]
 
 To run the tests, use the following commands:
 
+From the package base directory:
+
 ```
-# From the repo base directory
+$ cd src/cms_bluebutton
+
+$ # To run all tests:
 $ pytest
+
+$ # To run a specific test and show console debugging output:
+$ pytest tests/test_fhir_request.py -s
 ```
 
 To run the tests with coverage, use the following commands:
 
+From the package base directory:
+
 ```
-# From the repo base directory
 $ coverage run -m pytest
 
 # Check report
@@ -94,6 +91,8 @@ $ coverage report -m
 ### Create Distribution
 
 To create a distribution run the following command:
+
+From the repository base directory:
 
 ```
 $ python setup.py sdist
@@ -112,4 +111,3 @@ $ pip install check-manifest  # If not already installed.
 $ check-manifest --create
 $ python setup.py sdist
 ```
-
