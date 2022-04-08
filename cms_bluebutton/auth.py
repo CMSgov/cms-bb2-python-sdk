@@ -54,7 +54,7 @@ def refresh_auth_token(bb, auth_token):
 def generate_authorize_url(bb, auth_data):
     params = {
         "client_id": bb.client_id,
-        "redirect_uri": bb.client_secret,
+        "redirect_uri": bb.callback_url,
         "state": auth_data["state"],
         "response_type": "code",
         "code_challenge_method": "S256",

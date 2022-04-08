@@ -36,7 +36,10 @@ def test_auth_url_v1():
     assert parsed_url.path == "/v1/o/authorize"
     qps = parse_qs(parsed_url.query)
     assert bb.client_id in qps["client_id"]
+    assert bb.callback_url in qps["redirect_uri"]
+    assert "code" in qps["response_type"]
     assert auth_data["state"] in qps["state"]
+    assert "S256" in qps["code_challenge_method"]
     assert auth_data["code_challenge"] in qps["code_challenge"]
 
 
