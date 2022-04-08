@@ -1,1 +1,11 @@
-recursive-include src *.py
+recursive-include . *.py
+
+include *.json
+recursive-include cms_bluebutton *.json
+recursive-include cms_bluebutton *.yaml
+
+exclude .bluebutton-config.json
+
+include .flake8
+exclude requirements/*
+

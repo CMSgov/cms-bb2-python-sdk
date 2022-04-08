@@ -1,12 +1,12 @@
-from setuptools import setup
+import setuptools
 
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
-setup(
+setuptools.setup(
     name="cms_bluebutton",
-    version="1.0.0",
+    version="0.1.0",
     author="CMS Blue Button 2.0 Team",
     author_email="bb2@example.com",  # TODO: Do we want to include?
     license="Apache Software License",
@@ -25,11 +25,11 @@ setup(
         "Topic :: Software Development",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
-    py_modules=["cms_bluebutton"],
-    package_dir={"": "src"},
+    packages=setuptools.find_packages(),
     python_requires=">=3.6",
     install_requires=[
         "requests >= 2.0",
+        "pyyaml >= 5.0",
     ],
     extras_require={
         "dev": [
