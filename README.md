@@ -107,7 +107,7 @@ $ check-manifest
 
 To build the cms_bluebutton packages do the following:
 
-- Build a wheel type package:
+- Build a wheel distribution package (.whl):
 
   ```
   # From repository root directory:
@@ -115,15 +115,23 @@ To build the cms_bluebutton packages do the following:
   $ python setup.py bdist_wheel
   ```
 
-- Build a source type package:
+- Build a distribution package (.tar.gz):
 
   ```
   # From repository root directory:
   $ rm -rf build/
-  $ python setup.py bdist
+  $ python setup.py sdist
   ```
 
-The resulting distribution files with be created in the `sdist/` directory.
+- Build a source package:
+
+  ```
+  # From repository root directory:
+  $ rm -rf build/
+  $ python setup.py sdist
+  ```
+
+The resulting distribution files with be created in the `dist/` directory.
 
 
 ### Publishing
