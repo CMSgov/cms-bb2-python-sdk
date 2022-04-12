@@ -30,6 +30,6 @@ def fhir_request(bb, config):
 
 def handle_expired(bb, auth_token):
     if auth_token.access_token_expired():
-        return bb.refresh_auth_token(bb, auth_token)
+        return bb.refresh_auth_token(auth_token)
     else:
         return None
