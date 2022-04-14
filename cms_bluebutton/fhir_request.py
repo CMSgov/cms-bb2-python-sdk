@@ -14,7 +14,7 @@ def fhir_request(bb, config):
     retry_config = Retry(
         total=3, backoff_factor=5, status_forcelist=[500, 502, 503, 504]
     )
-    full_url = bb.base_url + "/v" + bb.version + "/" + config["url"]
+    full_url = "{}/v{}/{}".format(bb.base_url, bb.version, config["url"])
     headers = {
         "Authorization": "Bearer " + auth_token.access_token,
         SDK_HEADER_KEY: SDK_HEADER,
