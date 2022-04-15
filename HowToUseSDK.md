@@ -59,89 +59,95 @@ For application registration and client id and client secret, please refer to:
 
 ## Sample Usages: Obtain Access Grant, Probe Scope, and Access Data <a name="usages"></a>
 
-Below are psuedo code snippets showing SDK used with node express server.
+Below are psuedo code snippets showing SDK used with python server and flask.
 
 ```
 
-import express, { Request, Response } from 'express';
+from flask import Flask
+from flask import redirect, request
+from cms_bluebutton import BlueButton, AuthorizationToken
 
-const app = express();
+# initialize the app
+app = Flask(__name__)
 
-const bb = new BlueButton();
-const authData = bb.generateAuthData();
+bb = BlueButton()
+# auth_data is saved for the current user
+auth_data = bb.generate_auth_data()
 
-// AuthorizationToken holds access grant info:
-// access token, expire in, expire at, token type, scope, refreh token, etc.
-// it is associated with current logged in user in real app,
-// check SDK js docs for more details.
+# AuthorizationToken holds access grant info:
+# access token, expire in, expire at, token type, scope, refreh token, etc.
+# it is associated with current logged in user in real app,
+# check SDK python docs for more details.
 
-let authToken: AuthorizationToken;
+auth_token = None
 
-// start authorize flow: response with URL to redirect to Medicare.gov beneficiary login
-app.get('/', (req, res) => {
-    const redirectUrl = bb.generateAuthorizeUrl(authData);
-    res.redirect(redirectUrl);
-})
+# start authorize flow: response with URL to redirect to Medicare.gov beneficiary login
+@app.route("/", methods=["GET"])
+def get_auth_url():
+    return bb.generate_authorize_url(auth_data)
 
-// oauth2 call back: obtain access token, optionally check scope, and fetch data
-app.get('api/bluebutton/callback', async (req: Request, res: Response) => {
 
-  let results = {};
-    try {
-        authToken = await bb.getAuthorizationToken(authData, req.query.code, req.query.state, req.query.error);
-        // now access token obtained, note, during authorization, the beneficiary can grant
-        // access to his/her demographic data and claims data or only claims data, check the scope
-        // of the current access token as shown below:
-        const scopes: string[] = authToken.scope;
-        // iterate scope entries here or check if a permission is in the scope
-        if (authToken.scope.index("patient/Patient.read") > -1) {
-            // patient info access granted
-        }
+@app.route('/api/bluebutton/callback/', methods=['GET'])
+def authorization_callback():
+    request_query = request.args
+    code = request_query.get('code')
+    state = request_query.get('state')
 
-        /**
-        * 1. access token scope where demagraphic info included:
-        *
-        * scope: [
-        * "patient/Coverage.read",
-        * "patient/ExplanationOfBenefit.read",
-        * "patient/Patient.read",
-        * "profile",
-        * ]
-        *
-        * 2. access token scope where demagraphic info not included:
-        *
-        * scope: [
-        * "patient/Coverage.read",
-        * "patient/ExplanationOfBenefit.read",
-        * ]
-        */
+    auth_token = bb.get_authorization_token(auth_data, code, state)
 
-        // data flow: after access granted
-        // the app logic can fetch the beneficiary's data in app specific ways:
-        // e.g. download EOB periodically etc.
-        // access token can expire, SDK automatically refresh access token when that happens.
-        eobResults = await bb.getExplanationOfBenefitData(authToken);
-        patientResults = await bb.getPatientData(authToken);
-        coverageResults = await bb.getCoverageData(authToken);
-        profileResults = await bb.getProfileData(authToken);
+    # now access token obtained, note, during authorization, the beneficiary can grant
+    # access to his/her demographic data and claims data or only claims data, check the scope
+    # of the current access token as shown below:
 
-        results = {
-            eob: eobResults.response.data,
-            patient: patientResults.response.data,
-            coverage: coverageResults.response.data,
-            profile: profileResults.response.data
-        }
+    scopes = auth_token.scope;
 
-        authToken = profileResults.token;
-
-    } catch (e) {
-        console.log(e);
+    # iterate scope entries here or check if a permission is in the scope
+    if (scopes.index("patient/Patient.read") > -1) {
+        // patient info access granted
     }
 
-    res.json(results)
+    # 1. access token scope where demagraphic info included:
+    #
+    # scope: [
+    # "patient/Coverage.read",
+    # "patient/ExplanationOfBenefit.read",
+    # "patient/Patient.read",
+    # "profile",
+    # ]
+    #
+    # 2. access token scope where demagraphic info not included:
+    #
+    # scope: [
+    # "patient/Coverage.read",
+    # "patient/ExplanationOfBenefit.read",
+    # ]
 
-});
+    config = {
+        "auth_token": auth_token,
+        "params": {},
+        "url": "to be overriden"
+    }
 
+    result = {}
+
+    # fetch eob, patient, coverage, profile
+    try:
+        eob_data = bb.get_explaination_of_benefit_data(config)
+        result['eob_data'] = eob_data['response'].json()
+        pt_data = bb.get_patient_data(config)
+        result['patient_data'] = pt_data['response'].json()
+        coverage_data = bb.get_coverage_data(config)
+        result['coverage_data'] = coverage_data['response'].json()
+        profile_data = bb.get_profile_data(config)
+        result['profile_data'] = profile_data['response'].json()
+    except Exception as ex:
+        print(ex)
+
+    return result
+
+
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0', port=3001)
 ```
 
 ## A Complete Sample App <a name="samples"></a>
