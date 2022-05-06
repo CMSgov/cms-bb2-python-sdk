@@ -1,0 +1,37 @@
+// Paths to images and fonts relative from the SCSS entry point
+$font-path: "~@cmsgov/design-system/dist/fonts";
+$image-path: "~@cmsgov/design-system/dist/images";
+
+// Core CMSDS styles
+@import "@cmsgov/design-system/dist/scss/index";
+
+.bb-c-card {
+  background: #fff;
+  border: 1px solid #d6d7d9;
+  border-radius: 0.3rem;
+}
+
+.bb-c-card.default-card {
+  color: #323a45;
+  max-width: 700px;
+  text-decoration: none;
+  margin: 0.5rem;
+  padding: 0 1rem 1rem 1rem;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.bb-c-card.default-card:hover {
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  color: #000;
+}
+
+.full-width-card {
+  max-width: 100%;
+  padding: 1rem;
+}
+
+@media screen and (min-device-width: 1024px) {
+  .bb-c-card.default-card {
+    width: 445px;
+  }
+}
