@@ -1,8 +1,10 @@
-# Blue Button 2.0 SDK - Python Version
+# Blue Button 2.0 SDK Development Documentation
 
 ## Introduction
 
-Introduction goes here!
+This README contains information related to developing the SDK.
+
+It is intended for BB2 team members or others performing SDK development work.
 
 ## Install Prerequisites:
 
@@ -34,10 +36,6 @@ To install the package file do the following:
 # From repository root directory:
 $ pip install <package file name>
 ```
-
-## Usage
-
-Usage goes here!
 
 
 ## Developing the Blue Button 2.0 SDK (for BB2 team SDK developers)
@@ -133,5 +131,19 @@ To build the cms_bluebutton packages do the following:
 
 The resulting distribution files with be created in the `dist/` directory.
 
+### Install from a Package File
+
+Package files can be installed via the following commands:
+
+```bash
+pip install cms_bluebutton-0.1.0-py3-none-any.whl # wheel
+```
+or 
+
+```bash
+pip install cms_bluebutton-0.1.0.tar.gz # bdist
+```
 
 ### Publishing
+
+TODO!

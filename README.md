@@ -8,6 +8,7 @@
 4. [Usages: Obtain Access Grant, Probe Scope, and Access Data](#usages)
 5. [A Complete Sample App](#samples)
 6. [API Versions and Environments](#versions_and_environments)
+7. [SDK Development](#sdk_devel)
 
 ## Description <a name="description"></a>
 
@@ -235,3 +236,7 @@ Web location of the environments:
 [PRODUCTION Environment: https://api.bluebutton.cms.gov](https://api.bluebutton.cms.gov)
 
 [SANDBOX Environment: https://sandbox.bluebutton.cms.gov](https://sandbox.bluebutton.cms.gov)
+
+## SDK Development <a name="sdk_devel"></a>
+
+Documentation for BB2 team members and others developing the SDK can be found here:  [README-sdk-dev.md](./README-sdk-dev.md)
