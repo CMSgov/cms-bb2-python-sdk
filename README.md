@@ -26,30 +26,19 @@ Introduction goes here!
   $ source bb2_env/bin/activate
   # Perform install and commands after sourcing the venv.
   ```
-
-## Build
-
-To build the cms_bluebutton package do the following:
-
-- Build the package:
-
-  ```
-  # From repository root directory:
-  $ python setup.py bdist_wheel
-  ```
-
 ## Installation
 
-To install the package locally do the following:
+To install the package file do the following:
 
 ```
 # From repository root directory:
-$ pip install -e .
+$ pip install <package file name>
 ```
 
 ## Usage
 
 Usage goes here!
+
 
 ## Developing the Blue Button 2.0 SDK (for BB2 team SDK developers)
 
@@ -63,12 +52,14 @@ From the repository base directory:
 $ pip install -e .[dev]
 ```
 
+### Running tests
+
 To run the tests, use the following commands:
 
 From the package base directory:
 
 ```
-$ cd src/cms_bluebutton
+$ cd cms_bluebutton
 
 $ # To run all tests:
 $ pytest
@@ -88,26 +79,59 @@ $ coverage run -m pytest
 $ coverage report -m
 ```
 
-### Create Distribution
+## Packaging and Publishing
 
-To create a distribution run the following command:
 
-From the repository base directory:
+### Create or Update Manifest
 
-```
-$ python setup.py sdist
-```
-
-The resulting distribution files with be created in the `sdist/` directory.
-
-### Create Manifest
-
-Note that the previous distribution did not include the license.txt or test files. This requires creating a manifest.
-
-To create a MANIFEST.in file run the following commands:
+If check-manifest is not yet installed run the following:
 
 ```
 $ pip install check-manifest  # If not already installed.
-$ check-manifest --create
-$ python setup.py sdist
 ```
+
+If MANIFEST.in does not yet exist, run the following to create it:
+
+```
+$ check-manifest --create
+```
+
+To help with updating MANIFEST.in run the following to get information:
+
+```
+$ check-manifest
+# This creates the following directory: cms_bluebutton.egg-info
+```
+
+### Build Packages
+
+To build the cms_bluebutton packages do the following:
+
+- Build a wheel distribution package (.whl):
+
+  ```
+  # From repository root directory:
+  $ rm -rf build/
+  $ python setup.py bdist_wheel
+  ```
+
+- Build a distribution package (.tar.gz):
+
+  ```
+  # From repository root directory:
+  $ rm -rf build/
+  $ python setup.py sdist
+  ```
+
+- Build a source package:
+
+  ```
+  # From repository root directory:
+  $ rm -rf build/
+  $ python setup.py sdist
+  ```
+
+The resulting distribution files with be created in the `dist/` directory.
+
+
+### Publishing

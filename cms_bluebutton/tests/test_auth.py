@@ -1,8 +1,9 @@
+import datetime
 import pytest
 import requests_mock
 from urllib.parse import urlparse, parse_qs
 
-from cms_bluebutton import BlueButton
+from cms_bluebutton import BlueButton, AuthorizationToken
 from .fixtures.token_response import TOKEN_RESPONSE, REFRESH_TOKEN_RESPONSE
 
 
@@ -36,7 +37,10 @@ def test_auth_url_v1():
     assert parsed_url.path == "/v1/o/authorize"
     qps = parse_qs(parsed_url.query)
     assert bb.client_id in qps["client_id"]
+    assert bb.callback_url in qps["redirect_uri"]
+    assert "code" in qps["response_type"]
     assert auth_data["state"] in qps["state"]
+    assert "S256" in qps["code_challenge_method"]
     assert auth_data["code_challenge"] in qps["code_challenge"]
 
 
@@ -99,6 +103,28 @@ def test_get_authorization_token_callback():
         assert auth_token.patient == TOKEN_RESPONSE.get("patient")
         assert auth_token.expires_in == TOKEN_RESPONSE.get("expires_in")
         assert not auth_token.access_token_expired()
+
+        # Test .get_dict() method
+        token_dict = auth_token.get_dict()
+
+        # Test .set_dict() method where auth_token2 should be the same
+        auth_token2 = AuthorizationToken(token_dict)
+        auth_token2.set_dict(token_dict)
+
+        assert auth_token2 is not None
+        assert auth_token2.access_token == TOKEN_RESPONSE.get("access_token")
+        assert auth_token2.refresh_token == TOKEN_RESPONSE.get("refresh_token")
+        assert auth_token2.patient == TOKEN_RESPONSE.get("patient")
+        assert auth_token2.expires_in == TOKEN_RESPONSE.get("expires_in")
+        assert not auth_token2.access_token_expired()
+
+        # Test expired token
+        token_dict = auth_token.get_dict()
+        token_dict["expires_at"] = datetime.datetime.now(
+            datetime.timezone.utc
+        ) - datetime.timedelta(seconds=10)
+        auth_token2.set_dict(token_dict)
+        assert auth_token2.access_token_expired() is True
 
 
 def test_refresh_access_token_without_refreshtoken():
