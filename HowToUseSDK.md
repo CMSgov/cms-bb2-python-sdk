@@ -11,13 +11,13 @@
 
 ## Description <a name="description"></a>
 
-This is an SDK for interacting with [CMS Blue Button 2.0 API](https://bluebutton.cms.gov/developers/),
-the API allows applications to obtain a beneficiary's (who has login account with medicare.gov) grant
-to access his/her medicare claims data - through OAUTH2 [(RFC 6749)](https://datatracker.ietf.org/doc/html/rfc6749) authorization flow.
+This is an SDK for interacting with the [CMS Blue Button 2.0 API](https://bluebutton.cms.gov/developers/).
+The API allows applications to obtain a beneficiary's (who has login account with medicare.gov) grant
+to access their medicare claims data - through the OAuth 2.0 [(RFC 6749)](https://datatracker.ietf.org/doc/html/rfc6749) authorization flow.
 
-By using the SDK, the development of applications accessing Blue Button 2.0 API can be greatly simplified.
+By using the SDK, the development of applications accessing the Blue Button 2.0 API can be greatly simplified.
 
-Note, following the OAUTH2 best practices, OAUTH2 PKCE etension [(RFC 7636)](https://datatracker.ietf.org/doc/html/rfc7636) is always enabled.
+Note: In following OAuth 2.0 best practices, the PKCE extension [(RFC 7636)](https://datatracker.ietf.org/doc/html/rfc7636) is always enabled.
 
 ## Installation <a name="installation"></a>
 
@@ -27,42 +27,83 @@ $ pip install cms-bluebutton-sdk
 
 ## Configuration <a name="configuration"></a>
 
-the SDK needs to be properly configured to work, the parameters are:
+The SDK needs to be properly configured to work.
 
-- the app's credentials - client id, client secret
-- the app's callback url
-- the version number of the API
-- the app's environment (web location where the app is registered)
+The configuration parameters are:
 
-the configuration is in json format and stored in a local file, the default location
-is current working directory with file name: .bluebutton-config.json
+- The app's credentials - client id, client secret
+- The app's callback url
+- The version number of the API
+- The app's environment (the BB2.0 web location where the app is registered)
 
-A sample configuration json:
-
-```
-{
-  "clientId": "foo",
-  "clientSecret": "bar",
-  "callbackUrl": "https://www.fake.com/",
-}
-
-```
-
-| parameter    | value                   | Comments                        |
+| Parameter    | Value                   | Comments                        |
 | ------------ | ----------------------- | ------------------------------- |
-| clientId     | "foo"                   | oauth2 client id of the app     |
-| clientSecret | "bar"                   | oauth2 client secret of the app |
-| callbackUrl  | "https://www.fake.com/" | oauth2 callback url of the app  |
+| environment     | "SANDBOX" or "PRODUCTION"                   | BB2 API environment (default="SANDBOX")
+| version  | 1 or 2 | BB2 API version (default=2)  |
+| client_id     | "foo"                   | oauth2 client id of the app     |
+| client_secret | "bar"                   | oauth2 client secret of the app |
+| callback_url  | "https://www.fake.com/callback" | oauth2 callback URL of the app  |
 
 For application registration and client id and client secret, please refer to:
 [Blue Button 2.0 API Docs - Try the API](https://bluebutton.cms.gov/developers/#try-the-api)
 
-## Sample Usages: Obtain Access Grant, Probe Scope, and Access Data <a name="usages"></a>
+
+There are three ways to configure the SDK when instantiating a `BlueButton` class instance:
+
+  * Python Dictionary:
+    - A dictionary of configuration key:value pairs can be used.
+    - Configuration values can be provided from your own application's configuration method.
+    - Example code:
+      ```python
+      bb = BlueButton({
+               "environment": "PRODUCTION",
+               "client_id": "foo",
+               "client_secret": "bar",
+               "callback_url": "https://www.fake.com/callback",
+               "version": 2,
+            }
+      ```
+  * JSON config file:
+    - This is using a configuration file that is in a JSON format.
+    - This is stored in a local file.
+    - The default location is in the current working directory with a file name: .bluebutton-config.json
+    - Example code:
+      ```python
+      bb = BlueButton("settings/my_bb2_sdk_conf.json")
+      ```
+    - Example JSON in file:
+      ```json
+      {
+          "environment": "SANDBOX",
+          "client_id": "foo",
+          "client_secret": "bar",
+          "callback_url": "https://www.fake.com/callback",
+          "version": 2
+      }
+      ```
+
+  * YAML config file:
+    - This is using a configuration file that is in a YAML format.
+    - This is stored in a local file.
+    - The default location is in the current working directory with a file name: .bluebutton-config.yaml
+    - Example code:
+      ```python
+      bb = BlueButton("settings/my_bb2_sdk_conf.yaml")
+      ```
+    - Example YAML in file:
+      ```yaml
+      environment: "SANDBOX"
+      client_id: "foo"
+      client_secret: "bar"
+      callback_url: "https://www.fake.com/callback"
+      version: 2
+      ```
+
+## Sample Usage: Obtain Access Grant, Probe Scope, and Access Data <a name="usages"></a>
 
 Below are psuedo code snippets showing SDK used with python server and flask.
 
-```
-
+```python
 from flask import Flask
 from flask import redirect, request
 from cms_bluebutton import BlueButton, AuthorizationToken
@@ -70,18 +111,22 @@ from cms_bluebutton import BlueButton, AuthorizationToken
 # initialize the app
 app = Flask(__name__)
 
+# Instantiate SDK class instance via conf in file
 bb = BlueButton()
+
 # auth_data is saved for the current user
 auth_data = bb.generate_auth_data()
 
-# AuthorizationToken holds access grant info:
-# access token, expire in, expire at, token type, scope, refreh token, etc.
-# it is associated with current logged in user in real app,
-# check SDK python docs for more details.
+"""
+AuthorizationToken holds access grant info:
+  access token, expire in, expire at, token type, scope, refreh token, etc.
+It is associated with current logged in user in real app.
+Check SDK python docs for more details.
+"""
 
 auth_token = None
 
-# start authorize flow: response with URL to redirect to Medicare.gov beneficiary login
+# Start authorize flow: Response with URL to redirect to Medicare.gov beneficiary login
 @app.route("/", methods=["GET"])
 def get_auth_url():
     return bb.generate_authorize_url(auth_data)
@@ -95,33 +140,38 @@ def authorization_callback():
 
     auth_token = bb.get_authorization_token(auth_data, code, state)
 
-    # now access token obtained, note, during authorization, the beneficiary can grant
-    # access to his/her demographic data and claims data or only claims data, check the scope
-    # of the current access token as shown below:
+    """
+    Now access token obtained.
 
+    Note: During authorization, the beneficiary can grant
+    access to their demographic data and claims data or only claims data.
+
+    Check the scope
+    of the current access token as shown below:
+    """
     scopes = auth_token.scope;
 
     # iterate scope entries here or check if a permission is in the scope
-    if (scopes.index("patient/Patient.read") > -1) {
-        // patient info access granted
-    }
+    if "patient/Patient.read" in scopes: 
+        # patient info access granted
 
-    # 1. access token scope where demagraphic info included:
-    #
-    # scope: [
-    # "patient/Coverage.read",
-    # "patient/ExplanationOfBenefit.read",
-    # "patient/Patient.read",
-    # "profile",
-    # ]
-    #
-    # 2. access token scope where demagraphic info not included:
-    #
-    # scope: [
-    # "patient/Coverage.read",
-    # "patient/ExplanationOfBenefit.read",
-    # ]
-
+    """
+    1. access token scope where demagraphic info included:
+    
+    scope: [
+       "patient/Coverage.read",
+       "patient/ExplanationOfBenefit.read",
+       "patient/Patient.read",
+       "profile",
+    ]
+    
+    2. access token scope where demagraphic info not included:
+    
+    scope: [
+        "patient/Coverage.read",
+        "patient/ExplanationOfBenefit.read",
+    ]
+    """
     config = {
         "auth_token": auth_token,
         "params": {},
@@ -134,10 +184,13 @@ def authorization_callback():
     try:
         eob_data = bb.get_explaination_of_benefit_data(config)
         result['eob_data'] = eob_data['response'].json()
+
         pt_data = bb.get_patient_data(config)
         result['patient_data'] = pt_data['response'].json()
+
         coverage_data = bb.get_coverage_data(config)
         result['coverage_data'] = coverage_data['response'].json()
+
         profile_data = bb.get_profile_data(config)
         result['profile_data'] = profile_data['response'].json()
     except Exception as ex:
@@ -157,9 +210,15 @@ A Python React sample app can be found at:
 
 ## API Versions and Environments <a name="versions_and_environments"></a>
 
-From two environments: PRODUCTION and SANDBOX, Blue Button API is available in v1 and v2, data served from v1 is in FHIR STU2 format, and data from v2 is in FHIR R4 format, an application's target environment and API version can be set in the SDK configuration as shown by example below:
+Can be selected for environments: PRODUCTION and SANDBOX.
 
-```
+The Blue Button API is available in versions v1 and v2.
+
+The data served from v1 is in FHIR STU2 format, and data from v2 is in FHIR R4 format.
+
+An application's target environment and API version can be set in the SDK configuration as shown by the JSON example below:
+
+```json
 {
   "clientId": "foo",
   "clientSecret": "bar",
@@ -167,10 +226,9 @@ From two environments: PRODUCTION and SANDBOX, Blue Button API is available in v
   "version": "2",
   "environment": "PRODUCTION"
 }
-
 ```
 
-The default API version is v2, and default environment is SANDBOX.
+If not included, the default API version is v2, and the default environment is SANDBOX.
 
 Web location of the environments:
 
