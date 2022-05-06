@@ -26,90 +26,112 @@ Introduction goes here!
   $ source bb2_env/bin/activate
   # Perform install and commands after sourcing the venv.
   ```
-
-## Build
-
-To build the cms-bb2 package do the following:
-
-- Build the package:
-
-  ```
-  # From repository root directory:
-  $ python setup.py bdist_wheel
-  ```
-
 ## Installation
 
-To install the package locally do the following:
+To install the package file do the following:
 
 ```
 # From repository root directory:
-$ pip install -e .
+$ pip install <package file name>
 ```
 
 ## Usage
 
-To test it out with Python interactively:
+Usage goes here!
 
-```
-$ python
-Python 3.10.1 ...
-Type "help", "copyright", "credits" or "license" for more information.
->>> from bb2 import Bb2
->>>
->>> a = Bb2()
->>>
->>> a.hello()
-Hello from BB2 SDK Class method!!!
->>>
-```
 
-## Developing the Blue Button 2.0 SDK (for BB2 devs)
+## Developing the Blue Button 2.0 SDK (for BB2 team SDK developers)
 
 ### Install Development
 
 To install with the tools you need to develop and run tests do the following:
 
+From the repository base directory:
+
 ```
 $ pip install -e .[dev]
 ```
 
+### Running tests
+
 To run the tests, use the following commands:
 
+From the package base directory:
+
 ```
-# From the repo base directory
+$ cd cms_bluebutton
+
+$ # To run all tests:
 $ pytest
+
+$ # To run a specific test and show console debugging output:
+$ pytest tests/test_fhir_request.py -s
 ```
 
 To run the tests with coverage, use the following commands:
 
+From the package base directory:
+
 ```
-# From the repo base directory
 $ coverage run -m pytest
 
 # Check report
 $ coverage report -m
 ```
 
-### Create Distribution
+## Packaging and Publishing
 
-To create a distribution run the following command:
 
-```
-$ python setup.py sdist
-```
+### Create or Update Manifest
 
-The resulting distribution files with be created in the `sdist/` directory.
-
-### Create Manifest
-
-Note that the previous distribution did not include the license.txt or test files. This requires creating a manifest.
-
-To create a MANIFEST.in file run the following commands:
+If check-manifest is not yet installed run the following:
 
 ```
 $ pip install check-manifest  # If not already installed.
-$ check-manifest --create
-$ python setup.py sdist
 ```
 
+If MANIFEST.in does not yet exist, run the following to create it:
+
+```
+$ check-manifest --create
+```
+
+To help with updating MANIFEST.in run the following to get information:
+
+```
+$ check-manifest
+# This creates the following directory: cms_bluebutton.egg-info
+```
+
+### Build Packages
+
+To build the cms_bluebutton packages do the following:
+
+- Build a wheel distribution package (.whl):
+
+  ```
+  # From repository root directory:
+  $ rm -rf build/
+  $ python setup.py bdist_wheel
+  ```
+
+- Build a distribution package (.tar.gz):
+
+  ```
+  # From repository root directory:
+  $ rm -rf build/
+  $ python setup.py sdist
+  ```
+
+- Build a source package:
+
+  ```
+  # From repository root directory:
+  $ rm -rf build/
+  $ python setup.py sdist
+  ```
+
+The resulting distribution files with be created in the `dist/` directory.
+
+
+### Publishing

@@ -1,15 +1,15 @@
-from setuptools import setup
+import setuptools
 
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
-setup(
-    name="cms-bb2",
-    version="0.0.1",
+setuptools.setup(
+    name="cms_bluebutton",
+    version="0.1.0",
     author="CMS Blue Button 2.0 Team",
     author_email="bb2@example.com",  # TODO: Do we want to include?
-    license="Apache Software License",
+    license="CC0 1.0 Universal",
     description="An SDK used for interacting with the CMS Blue Button 2.0 API",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -17,7 +17,7 @@ setup(
     # For classifiers: https://pypi.org/classifiers/
     classifiers=[
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: Apache Software License",
+        "License :: CC0 1.0 Universal (CC0 1.0) Public Domain Dedication",
         "Operating System :: OS Independent",
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
@@ -25,11 +25,11 @@ setup(
         "Topic :: Software Development",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
-    py_modules=["blueButton"],
-    package_dir={"": "src"},
+    packages=setuptools.find_packages(),
     python_requires=">=3.6",
     install_requires=[
         "requests >= 2.0",
+        "pyyaml >= 5.0",
     ],
     extras_require={
         "dev": [
