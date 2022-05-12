@@ -10,15 +10,13 @@ def test_invalid_file_extension():
     # Test extension not matching .json or .yaml
     with pytest.raises(
         ValueError,
-        match=r"Error: Configuration file extension"
-              " must be .json or .yaml for:.*",
+        match=r"Error: Configuration file extension" " must be .json or .yaml for:.*",
     ):
         BlueButton(config="file.xxx")
 
 
 def test_read_config_json_equals_yaml():
-    bb = BlueButton(config=CONFIGS_DIR +
-             "json/bluebutton-sample-config-valid-sbx.json")
+    bb = BlueButton(config=CONFIGS_DIR + "json/bluebutton-sample-config-valid-sbx.json")
 
     # Test dict's are equal for both JSON & YAML
     assert bb._read_config(
@@ -30,8 +28,7 @@ def test_read_config_json_equals_yaml():
 
 def test_valid_config():
     # valid config sbx
-    bb = BlueButton(config=CONFIGS_DIR +
-             "json/bluebutton-sample-config-valid-sbx.json")
+    bb = BlueButton(config=CONFIGS_DIR + "json/bluebutton-sample-config-valid-sbx.json")
     assert bb.base_url == "https://sandbox.bluebutton.cms.gov"
     assert bb.client_id == "<your BB2 client_id here>"
     assert bb.client_secret == "<your BB2 client_secret here>"
@@ -39,8 +36,9 @@ def test_valid_config():
     assert bb.version == 1
 
     # valid config prod
-    bb = BlueButton(config=CONFIGS_DIR +
-             "json/bluebutton-sample-config-valid-prod.json")
+    bb = BlueButton(
+        config=CONFIGS_DIR + "json/bluebutton-sample-config-valid-prod.json"
+    )
     assert bb.base_url == "https://api.bluebutton.cms.gov"
     assert bb.client_id == "<your BB2 client_id here>"
     assert bb.client_secret == "<your BB2 client_secret here>"
@@ -80,8 +78,7 @@ def test_config_setting_missing():
     for setting, file_name in [
         ["client_id", "json/bluebutton-sample-config-missing-id.json"],
         ["client_secret", "json/bluebutton-sample-config-missing-secret.json"],
-        ["callback_url",
-         "json/bluebutton-sample-config-missing-callback.json"],
+        ["callback_url", "json/bluebutton-sample-config-missing-callback.json"],
     ]:
         with pytest.raises(
             ValueError,
@@ -92,6 +89,7 @@ def test_config_setting_missing():
 
 
 def test_config_version_missing_defaults_to_v2():
-    bb = BlueButton(config=CONFIGS_DIR +
-             "json/bluebutton-sample-config-missing-version.json")
+    bb = BlueButton(
+        config=CONFIGS_DIR + "json/bluebutton-sample-config-missing-version.json"
+    )
     assert bb.version == 2

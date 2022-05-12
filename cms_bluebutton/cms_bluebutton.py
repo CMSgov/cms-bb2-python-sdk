@@ -22,8 +22,6 @@ DEFAULT_CONFIG_FILE_LOCATION = ROOT_DIR + "./.bluebutton-config.json"
 
 
 class BlueButton:
-    name = "bb2"
-    verbose_name = "Blue Button 2.0 SDK Package"
 
     def __init__(self, config=DEFAULT_CONFIG_FILE_LOCATION):
         self.client_id = None
