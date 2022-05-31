@@ -7,7 +7,7 @@ import datetime
 import urllib
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 
-from .constants import SDK_HEADER, SDK_HEADER_KEY
+from .constants import SDK_HEADERS
 
 
 class AuthorizationToken:
@@ -58,9 +58,7 @@ def refresh_auth_token(bb, auth_token):
         "refresh_token": auth_token.refresh_token,
     }
 
-    headers = {
-        SDK_HEADER_KEY: SDK_HEADER,
-    }
+    headers = SDK_HEADERS
 
     token_response = requests.post(
         url=bb.auth_token_url,
@@ -132,10 +130,12 @@ def get_access_token_from_code(bb, auth_data, callback_code):
     }
 
     mp_encoder = MultipartEncoder(data)
+    headers = SDK_HEADERS
+    headers["content-type"] = mp_encoder.content_type
     token_response = requests.post(
         url=bb.auth_token_url,
         data=mp_encoder,
-        headers={"content-type": mp_encoder.content_type, SDK_HEADER_KEY: SDK_HEADER},
+        headers=headers
     )
     token_response.raise_for_status()
     token_dict = token_response.json()
