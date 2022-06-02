@@ -1,137 +1,242 @@
-# Blue Button 2.0 SDK - Python Version
+# Blue Button API SDK (Python)
 
-## Introduction
+# Table of contents
 
-Introduction goes here!
+1. [Descritpion](#description)
+2. [Installation](#installation)
+3. [Configuration](#configuration)
+4. [Usages: Obtain Access Grant, Probe Scope, and Access Data](#usages)
+5. [A Complete Sample App](#samples)
+6. [API Versions and Environments](#versions_and_environments)
+7. [SDK Development](#sdk_devel)
 
-## Install Prerequisites:
+## Description <a name="description"></a>
 
-- Install Python for your environment and verify the version with:
+This is an SDK for interacting with the [CMS Blue Button 2.0 API](https://bluebutton.cms.gov/developers/).
+The API allows applications to obtain a beneficiary's (who has login account with medicare.gov) grant
+to access their medicare claims data - through the OAuth 2.0 [(RFC 6749)](https://datatracker.ietf.org/doc/html/rfc6749) authorization flow.
 
-  ```
-  $ python --version
-  # or
-  $ python3 --version
-  ```
+By using the SDK, the development of applications accessing the Blue Button 2.0 API can be greatly simplified.
 
-  This should output a 3.x version number.
+Note: In following OAuth 2.0 best practices, the PKCE extension [(RFC 7636)](https://datatracker.ietf.org/doc/html/rfc7636) is always enabled.
 
-- Install up to date versions of pip, setuptools and wheel:
-  ```
-  $ python3 -m pip install --upgrade pip setuptools wheel
-  ```
-- Optionally you can use a virtual environment for the previous insall step via the following:
-  ```
-  $ python -m venv bb2_env
-  $ source bb2_env/bin/activate
-  # Perform install and commands after sourcing the venv.
-  ```
-## Installation
+## Installation <a name="installation"></a>
 
-To install the package file do the following:
-
-```
-# From repository root directory:
-$ pip install <package file name>
+```bash
+$ pip install cms-bluebutton-sdk
 ```
 
-## Usage
+## Configuration <a name="configuration"></a>
 
-Usage goes here!
+The SDK needs to be properly configured to work.
+
+The configuration parameters are:
+
+- The app's credentials - client id, client secret
+- The app's callback url
+- The version number of the API
+- The app's environment (the BB2.0 web location where the app is registered)
+
+| Parameter    | Value                   | Comments                        |
+| ------------ | ----------------------- | ------------------------------- |
+| environment     | "SANDBOX" or "PRODUCTION"                   | BB2 API environment (default="SANDBOX")
+| version  | 1 or 2 | BB2 API version (default=2)  |
+| client_id     | "foo"                   | oauth2 client id of the app     |
+| client_secret | "bar"                   | oauth2 client secret of the app |
+| callback_url  | "https://www.fake.com/callback" | oauth2 callback URL of the app  |
+
+For application registration and client id and client secret, please refer to:
+[Blue Button 2.0 API Docs - Try the API](https://bluebutton.cms.gov/developers/#try-the-api)
 
 
-## Developing the Blue Button 2.0 SDK (for BB2 team SDK developers)
+There are three ways to configure the SDK when instantiating a `BlueButton` class instance:
 
-### Install Development
+  * Python Dictionary:
+    - A dictionary of configuration key:value pairs can be used.
+    - Configuration values can be provided from your own application's configuration method.
+    - Example code:
+      ```python
+      bb = BlueButton({
+               "environment": "PRODUCTION",
+               "client_id": "foo",
+               "client_secret": "bar",
+               "callback_url": "https://www.fake.com/callback",
+               "version": 2,
+            }
+      ```
+  * JSON config file:
+    - This is using a configuration file that is in a JSON format.
+    - This is stored in a local file.
+    - The default location is in the current working directory with a file name: .bluebutton-config.json
+    - Example code:
+      ```python
+      bb = BlueButton("settings/my_bb2_sdk_conf.json")
+      ```
+    - Example JSON in file:
+      ```json
+      {
+          "environment": "SANDBOX",
+          "client_id": "foo",
+          "client_secret": "bar",
+          "callback_url": "https://www.fake.com/callback",
+          "version": 2
+      }
+      ```
 
-To install with the tools you need to develop and run tests do the following:
+  * YAML config file:
+    - This is using a configuration file that is in a YAML format.
+    - This is stored in a local file.
+    - The default location is in the current working directory with a file name: .bluebutton-config.yaml
+    - Example code:
+      ```python
+      bb = BlueButton("settings/my_bb2_sdk_conf.yaml")
+      ```
+    - Example YAML in file:
+      ```yaml
+      environment: "SANDBOX"
+      client_id: "foo"
+      client_secret: "bar"
+      callback_url: "https://www.fake.com/callback"
+      version: 2
+      ```
 
-From the repository base directory:
+## Sample Usage: Obtain Access Grant, Probe Scope, and Access Data <a name="usages"></a>
 
+Below are psuedo code snippets showing SDK used with python server and flask.
+
+```python
+from flask import Flask
+from flask import redirect, request
+from cms_bluebutton import BlueButton, AuthorizationToken
+
+# initialize the app
+app = Flask(__name__)
+
+# Instantiate SDK class instance via conf in file
+bb = BlueButton()
+
+# auth_data is saved for the current user
+auth_data = bb.generate_auth_data()
+
+"""
+AuthorizationToken holds access grant info:
+  access token, expire in, expire at, token type, scope, refreh token, etc.
+It is associated with current logged in user in real app.
+Check SDK python docs for more details.
+"""
+
+auth_token = None
+
+# Start authorize flow: Response with URL to redirect to Medicare.gov beneficiary login
+@app.route("/", methods=["GET"])
+def get_auth_url():
+    return bb.generate_authorize_url(auth_data)
+
+
+@app.route('/api/bluebutton/callback/', methods=['GET'])
+def authorization_callback():
+    request_query = request.args
+    code = request_query.get('code')
+    state = request_query.get('state')
+
+    auth_token = bb.get_authorization_token(auth_data, code, state)
+
+    """
+    Now access token obtained.
+
+    Note: During authorization, the beneficiary can grant
+    access to their demographic data and claims data or only claims data.
+
+    Check the scope
+    of the current access token as shown below:
+    """
+    scopes = auth_token.scope;
+
+    # iterate scope entries here or check if a permission is in the scope
+    if "patient/Patient.read" in scopes: 
+        # patient info access granted
+
+    """
+    1. access token scope where demagraphic info included:
+    
+    scope: [
+       "patient/Coverage.read",
+       "patient/ExplanationOfBenefit.read",
+       "patient/Patient.read",
+       "profile",
+    ]
+    
+    2. access token scope where demagraphic info not included:
+    
+    scope: [
+        "patient/Coverage.read",
+        "patient/ExplanationOfBenefit.read",
+    ]
+    """
+    config = {
+        "auth_token": auth_token,
+        "params": {},
+        "url": "to be overriden"
+    }
+
+    result = {}
+
+    # fetch eob, patient, coverage, profile
+    try:
+        eob_data = bb.get_explaination_of_benefit_data(config)
+        result['eob_data'] = eob_data['response'].json()
+
+        pt_data = bb.get_patient_data(config)
+        result['patient_data'] = pt_data['response'].json()
+
+        coverage_data = bb.get_coverage_data(config)
+        result['coverage_data'] = coverage_data['response'].json()
+
+        profile_data = bb.get_profile_data(config)
+        result['profile_data'] = profile_data['response'].json()
+    except Exception as ex:
+        print(ex)
+
+    return result
+
+
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0', port=3001)
 ```
-$ pip install -e .[dev]
+
+## A Complete Sample App <a name="samples"></a>
+
+A Python React sample app can be found at:
+[CMS Blue Button Python Sample App](https://github.com/CMSgov/bluebutton-sample-client-python-react)
+
+## API Versions and Environments <a name="versions_and_environments"></a>
+
+Can be selected for environments: PRODUCTION and SANDBOX.
+
+The Blue Button API is available in versions v1 and v2.
+
+The data served from v1 is in FHIR STU2 format, and data from v2 is in FHIR R4 format.
+
+An application's target environment and API version can be set in the SDK configuration as shown by the JSON example below:
+
+```json
+{
+  "clientId": "foo",
+  "clientSecret": "bar",
+  "callbackUrl": "https://www.fake.com/",
+  "version": "2",
+  "environment": "PRODUCTION"
+}
 ```
 
-### Running tests
+If not included, the default API version is v2, and the default environment is SANDBOX.
 
-To run the tests, use the following commands:
+Web location of the environments:
 
-From the package base directory:
+[PRODUCTION Environment: https://api.bluebutton.cms.gov](https://api.bluebutton.cms.gov)
 
-```
-$ cd cms_bluebutton
+[SANDBOX Environment: https://sandbox.bluebutton.cms.gov](https://sandbox.bluebutton.cms.gov)
 
-$ # To run all tests:
-$ pytest
+## SDK Development <a name="sdk_devel"></a>
 
-$ # To run a specific test and show console debugging output:
-$ pytest tests/test_fhir_request.py -s
-```
-
-To run the tests with coverage, use the following commands:
-
-From the package base directory:
-
-```
-$ coverage run -m pytest
-
-# Check report
-$ coverage report -m
-```
-
-## Packaging and Publishing
-
-
-### Create or Update Manifest
-
-If check-manifest is not yet installed run the following:
-
-```
-$ pip install check-manifest  # If not already installed.
-```
-
-If MANIFEST.in does not yet exist, run the following to create it:
-
-```
-$ check-manifest --create
-```
-
-To help with updating MANIFEST.in run the following to get information:
-
-```
-$ check-manifest
-# This creates the following directory: cms_bluebutton.egg-info
-```
-
-### Build Packages
-
-To build the cms_bluebutton packages do the following:
-
-- Build a wheel distribution package (.whl):
-
-  ```
-  # From repository root directory:
-  $ rm -rf build/
-  $ python setup.py bdist_wheel
-  ```
-
-- Build a distribution package (.tar.gz):
-
-  ```
-  # From repository root directory:
-  $ rm -rf build/
-  $ python setup.py sdist
-  ```
-
-- Build a source package:
-
-  ```
-  # From repository root directory:
-  $ rm -rf build/
-  $ python setup.py sdist
-  ```
-
-The resulting distribution files with be created in the `dist/` directory.
-
-
-### Publishing
+Documentation for BB2 team members and others developing the SDK can be found here:  [README-sdk-dev.md](./README-sdk-dev.md)
