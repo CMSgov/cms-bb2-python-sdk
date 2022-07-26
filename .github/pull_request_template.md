@@ -43,3 +43,52 @@ Common items include:
 If you're reviewing this PR, please check these things, in particular:
 
 - TODO
+
+### What Security Implications Does This PR Have?
+
+Submitters should complete the following questionnaire:
+
+- If the answer to any of the questions below is **Yes**, then here's a link to the associated Security Impact Assessment (SIA), security checklist, or other similar document in Confluence: N/A.
+  - Does this PR add any new software dependencies? **Yes** or **No**.
+  - Does this PR modify or invalidate any of our security controls? **Yes** or **No**.
+  - Does this PR store or transmit data that was not stored or transmitted before? **Yes** or **No**.
+- If the answer to any of the questions below is **Yes**, then please add StewGoin as a reviewer, and note that this PR should not be merged unless/until he also approves it.
+  - Do you think this PR requires additional review of its security implications for other reasons? **Yes** or **No**.
+
+### What Needs to Be Merged and Deployed Before this PR?
+
+<!--
+Add some items to the following list, or remove the entire section if it doesn't apply.
+
+Common items include:
+* New features in external dependencies (e.g. BB2-API).
+-->
+
+This PR cannot be either merged or deployed until the following pre-requisite changes have been fully deployed:
+
+- CMSgov/some_repo#42
+
+<!--
+Helpful hint: if needed, Git allows you to edit your PR's commits and history, prior to merge.
+See these resources for more information:
+
+* <https://dev.to/maxwell_dev/the-git-rebase-introduction-i-wish-id-had>
+* <https://raphaelfabeni.com/git-editing-commits-part-1/>
+-->
+
+I have gone through and verified that...:
+
+- [ ] This PR is reasonably limited in scope, to help ensure that:
+  1. It doesn't unnecessarily tie a bunch of disparate features, fixes, refactorings, etc. together.
+  2. There isn't too much of a burden on reviewers.
+  3. Any problems it causes have a small "blast radius".
+  4. It'll be easier to rollback if that becomes necessary.
+- [ ] I have named this PR and its branch such that they'll be automatically be linked to the (most) relevant Jira issue, per: <https://confluence.atlassian.com/adminjiracloud/integrating-with-development-tools-776636216.html>.
+- [ ] This PR includes any required documentation changes, including `README` updates and changelog / release notes entries.
+- [ ] All new and modified code is appropriately commented, such that the what and why of its design would be reasonably clear to engineers, preferably ones unfamiliar with the project.
+- [ ] All tech debt and/or shortcomings introduced by this PR are detailed in `TODO` and/or `FIXME` comments, which include a JIRA ticket ID for any items that require urgent attention.
+- [ ] Reviews are requested from both:
+  - At least two other engineers on this project, at least one of whom is a senior engineer or owns the relevant component(s) here.
+  - Any relevant engineers on other projects (e.g. BFD, SLS, etc.).
+- [ ] Any deviations from the other policies in the [DASG Engineering Standards](https://github.com/CMSgov/cms-oeda-dasg/blob/master/policies/engineering_standards.md) are specifically called out in this PR, above.
+  - Please review the standards every few months to ensure you're familiar with them.
