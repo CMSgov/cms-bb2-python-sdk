@@ -1,5 +1,5 @@
-from flask import request, Flask
-from src.cms_bluebutton.cms_bluebutton import BlueButton
+from flask import redirect, request, Flask
+from cms_bluebutton.cms_bluebutton import BlueButton
 
 
 app = Flask(__name__)
@@ -15,9 +15,11 @@ auth_data = bb.generate_auth_data()
 auth_token = None
 
 
-@app.route('/api/authorize/authurl', methods=['GET'])
+@app.route('/', methods=['GET'])
 def get_auth_url():
-    return bb.generate_authorize_url(auth_data)
+    redirect_url = bb.generate_authorize_url(auth_data)
+    return redirect(redirect_url, code=302)
+    
 
 
 @app.route('/api/bluebutton/callback/', methods=['GET'])
