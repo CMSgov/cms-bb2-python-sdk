@@ -1,7 +1,7 @@
 import requests
 from requests.adapters import HTTPAdapter, Retry
 
-from .constants import SDK_HEADER, SDK_HEADER_KEY
+from .constants import SDK_HEADERS
 
 
 def fhir_request(bb, config):
@@ -14,11 +14,9 @@ def fhir_request(bb, config):
     retry_config = Retry(
         total=3, backoff_factor=5, status_forcelist=[500, 502, 503, 504]
     )
-    full_url = bb.base_url + "/v" + str(bb.version) + "/" + config["url"]
-    headers = {
-        "Authorization": "Bearer " + auth_token.access_token,
-        SDK_HEADER_KEY: SDK_HEADER,
-    }
+    full_url = "{}/v{}/{}".format(bb.base_url, bb.version, config["url"])
+    headers = SDK_HEADERS
+    headers["Authorization"] = "Bearer " + auth_token.access_token
     adapter = HTTPAdapter(max_retries=retry_config)
     sesh = requests.Session()
     sesh.mount("https://", adapter)
@@ -30,6 +28,6 @@ def fhir_request(bb, config):
 
 def handle_expired(bb, auth_token):
     if auth_token.access_token_expired():
-        return bb.refresh_auth_token(bb, auth_token)
+        return bb.refresh_auth_token(auth_token)
     else:
         return None
