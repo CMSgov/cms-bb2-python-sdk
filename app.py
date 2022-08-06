@@ -30,6 +30,16 @@ def authorization_callback():
 
     auth_token = bb.get_authorization_token(auth_data, code, state)
 
+    print("============== check auth token =================")
+    print(auth_token.get_dict())
+
+    # pre-emptively refresh token
+    print("============== pre-emptively refresh auth token =================")
+    auth_token = bb.refresh_auth_token(auth_token)
+
+    print("============== check refreshed auth token =================")
+    print(auth_token.get_dict())
+
     config = {
         "auth_token": auth_token,
         "params": {},

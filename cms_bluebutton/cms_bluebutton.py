@@ -64,12 +64,12 @@ class BlueButton:
 
         # Check environment setting
         env = config_dict.get("environment", None)
-        if env in ["SANDBOX", "PRODUCTION"]:
+        if env in ["SANDBOX", "PRODUCTION", "LOCAL"]:
             self.base_url = ENVIRONMENT_URLS.get(env, None)
         else:
             raise ValueError(
                 "Error: Configuration environment must be set to"
-                " SANDBOX or PRODUCTION in: {}".format(config)
+                " SANDBOX or PRODUCTION or LOCAL in: {}".format(config)
             )
 
         # Check other settings are provided

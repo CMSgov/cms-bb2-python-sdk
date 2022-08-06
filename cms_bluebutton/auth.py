@@ -57,16 +57,7 @@ def refresh_auth_token(bb, auth_token) -> AuthorizationToken:
         "grant_type": "refresh_token",
         "refresh_token": auth_token.refresh_token,
     }
-
-    headers = SDK_HEADERS
-
-    token_response = requests.post(
-        url=bb.auth_token_url,
-        data=data,
-        headers=headers,
-        auth=(bb.client_id, bb.client_secret),
-    )
-
+    token_response = _do_post(data, bb, (bb.client_id, bb.client_secret))
     token_response.raise_for_status()
     return AuthorizationToken(token_response.json())
 
@@ -129,14 +120,7 @@ def get_access_token_from_code(bb, auth_data, callback_code) -> dict:
         "code_challenge": auth_data["code_challenge"],
     }
 
-    mp_encoder = MultipartEncoder(data)
-    headers = SDK_HEADERS
-    headers["content-type"] = mp_encoder.content_type
-    token_response = requests.post(
-        url=bb.auth_token_url,
-        data=mp_encoder,
-        headers=headers
-    )
+    token_response = _do_post(data, bb, None)
     token_response.raise_for_status()
     token_dict = token_response.json()
     token_dict["expires_at"] = datetime.datetime.now(
@@ -144,7 +128,6 @@ def get_access_token_from_code(bb, auth_data, callback_code) -> dict:
     ) + datetime.timedelta(seconds=token_dict["expires_in"])
 
     return token_dict
-
 
 def get_authorization_token(bb, auth_data, callback_code, callback_state):
     if callback_code is None:
@@ -157,3 +140,18 @@ def get_authorization_token(bb, auth_data, callback_code, callback_state):
         raise ValueError("Provided callback state does not match.")
 
     return AuthorizationToken(get_access_token_from_code(bb, auth_data, callback_code))
+
+def _do_post(data, bb, auth):
+    mp_encoder = MultipartEncoder(data)
+    headers = SDK_HEADERS
+    headers["content-type"] = mp_encoder.content_type
+    return requests.post(
+        url=bb.auth_token_url,
+        data=mp_encoder,
+        headers=headers
+    ) if not auth else requests.post(
+        url=bb.auth_token_url,
+        data=mp_encoder,
+        headers=headers,
+        auth=auth
+    )
