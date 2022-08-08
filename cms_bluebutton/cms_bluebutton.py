@@ -68,7 +68,7 @@ class BlueButton:
 
         # Check environment setting
         env = config_dict.get("environment", None)
-        if env in ["SANDBOX", "PRODUCTION", "LOCAL"]:
+        if env in ["SANDBOX", "PRODUCTION", "LOCAL", "TEST"]:
             self.base_url = ENVIRONMENT_URLS.get(env, None)
         else:
             raise ValueError(

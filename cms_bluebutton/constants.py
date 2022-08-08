@@ -10,6 +10,7 @@ REFRESH_TOKEN_ENDPOINT = "/o/token/"
 ENVIRONMENT_URLS = {
     "SANDBOX": "https://sandbox.bluebutton.cms.gov",
     "PRODUCTION": "https://api.bluebutton.cms.gov",
+    "TEST": "https://test.bluebutton.cms.gov",
     "LOCAL": "http://localhost:8000",
 }
 
