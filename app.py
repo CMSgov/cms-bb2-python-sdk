@@ -48,15 +48,28 @@ def authorization_callback():
 
     result = {}
 
+    print("============== before data requests =================")
     # fetch eob, patient, coverage, profile
     try:
         eob_data = bb.get_explaination_of_benefit_data(config)
+        print("============== EOB pass auth token =================")
+        auth_token = eob_data['auth_token']
+        print("============== after EOB request =================")
         result['eob_data'] = eob_data['response'].json()
         pt_data = bb.get_patient_data(config)
+        print("============== Patient pass auth token =================")
+        auth_token = pt_data['auth_token']
+        print("============== after Patient request =================")
         result['patient_data'] = pt_data['response'].json()
         coverage_data = bb.get_coverage_data(config)
+        print("============== Coverage pass auth token =================")
+        auth_token = coverage_data['auth_token']
+        print("============== after Coverage request =================")
         result['coverage_data'] = coverage_data['response'].json()
         profile_data = bb.get_profile_data(config)
+        print("============== Profile pass auth token =================")
+        auth_token = profile_data['auth_token']
+        print("============== after Profile request =================")
         result['profile_data'] = profile_data['response'].json()
     except Exception as ex:
         print(ex)

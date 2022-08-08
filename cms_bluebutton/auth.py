@@ -15,7 +15,8 @@ class AuthorizationToken:
         self.set_dict(auth_token_dict)
 
     def access_token_expired(self):
-        return self.expires_at < datetime.datetime.now(datetime.timezone.utc)
+        cur_time = datetime.datetime.now(datetime.timezone.utc)
+        return self.expires_at < cur_time
 
     def get_dict(self):
         return {
@@ -42,8 +43,7 @@ class AuthorizationToken:
                     auth_token_dict.get("expires_at")
                 ).astimezone(datetime.timezone.utc)
         else:
-            self.expires_at = datetime.datetime.now(datetime.timezone.utc)
-            +datetime.timedelta(seconds=self.expires_in)
+            self.expires_at = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(seconds=self.expires_in)
 
         self.patient = auth_token_dict.get("patient")
         self.refresh_token = auth_token_dict.get("refresh_token")
@@ -129,6 +129,7 @@ def get_access_token_from_code(bb, auth_data, callback_code) -> dict:
 
     return token_dict
 
+
 def get_authorization_token(bb, auth_data, callback_code, callback_state):
     if callback_code is None:
         raise ValueError("Authorization code missing.")
@@ -140,6 +141,7 @@ def get_authorization_token(bb, auth_data, callback_code, callback_state):
         raise ValueError("Provided callback state does not match.")
 
     return AuthorizationToken(get_access_token_from_code(bb, auth_data, callback_code))
+
 
 def _do_post(data, bb, auth):
     mp_encoder = MultipartEncoder(data)
