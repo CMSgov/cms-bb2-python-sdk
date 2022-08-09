@@ -61,9 +61,9 @@ Retry is enabled by default for FHIR requests, retry_settings: parameters for ex
 
 the exponential back off factor (in seconds) is used to calculate interval between retries by below formular, where i starts from 0:
 
-{backoff factor} * (2 ** ({i} - 1))
+backoff factor * (2 ** (i - 1))
 
-e.g. for backoff_factor is 5 seconds, it will generate wait intervals: 2.5, 5, 20, ...
+e.g. for backoff_factor is 5 seconds, it will generate wait intervals: 2.5, 5, 10, ...
 
 to disable the retry: set total = 0
 
