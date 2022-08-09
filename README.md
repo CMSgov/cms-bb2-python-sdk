@@ -36,6 +36,7 @@ The configuration parameters are:
 - The app's callback url
 - The version number of the API
 - The app's environment (the BB2.0 web location where the app is registered)
+- The FHIR call retry settings
 
 | Parameter    | Value                   | Comments                        |
 | ------------ | ----------------------- | ------------------------------- |
@@ -48,6 +49,23 @@ The configuration parameters are:
 For application registration and client id and client secret, please refer to:
 [Blue Button 2.0 API Docs - Try the API](https://bluebutton.cms.gov/developers/#try-the-api)
 
+FHIR requests retry:
+
+Retry is enabled by default for FHIR requests, retry_settings: parameters for exponential back off retry algorithm
+
+| retry parameter   | value (default)      | Comments                         |
+| ----------------- | -------------------- | -------------------------------- |
+| backoff_factor    | 5                    | back off factor in seconds       |
+| total             | 3                    | max retries                      |
+| status_forcelist  | [500, 502, 503, 504] | error response codes to retry on |
+
+the exponential back off factor (in seconds) is used to calculate interval between retries by below formular, where i starts from 0:
+
+backoff factor * (2 ** (i - 1))
+
+e.g. for backoff_factor is 5 seconds, it will generate wait intervals: 2.5, 5, 10, ...
+
+to disable the retry: set total = 0
 
 There are three ways to configure the SDK when instantiating a `BlueButton` class instance:
 
@@ -62,6 +80,11 @@ There are three ways to configure the SDK when instantiating a `BlueButton` clas
                "client_secret": "bar",
                "callback_url": "https://www.fake.com/callback",
                "version": 2,
+               "retry_settings": {
+                   "total": 3,
+                   "backoff_factor": 5,
+                   "status_forcelist": [500, 502, 503, 504]
+               }
             }
       ```
   * JSON config file:
@@ -79,7 +102,12 @@ There are three ways to configure the SDK when instantiating a `BlueButton` clas
           "client_id": "foo",
           "client_secret": "bar",
           "callback_url": "https://www.fake.com/callback",
-          "version": 2
+          "version": 2,
+          "retry_settings": {
+              "total": 3,
+              "backoff_factor": 5,
+              "status_forcelist": [500, 502, 503, 504]
+          }
       }
       ```
 
