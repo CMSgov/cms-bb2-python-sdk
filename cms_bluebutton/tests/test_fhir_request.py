@@ -46,6 +46,10 @@ def success_fhir_eob_request_mock(*args, **kwargs):
     return MockSession({"resourceType": "Bundle", "id": "bbb-222-222-222-bbbb"}, 200)
 
 
+def success_fhir_eob_pages_request_mock(*args, **kwargs):
+    return MockSession({"resourceType": "Bundle", "id": "bbb-222-222-222-bbbb"}, 200)
+
+
 def success_fhir_profile_request_mock(*args, **kwargs):
     return MockSession({"sub": "-20140000010000", "patient": "-20140000010000"}, 200)
 
@@ -106,6 +110,18 @@ class TestAPI(unittest.TestCase):
         self.assertEqual(response["response"].json()["id"], "bbb-222-222-222-bbbb")
         self.assertEqual(response["response"].json()["resourceType"], "Bundle")
         self.assertEqual(get_request_mock.call_count, 1)
+
+    @mock.patch("requests.Session", side_effect=success_fhir_eob_pages_request_mock)
+    def test_successful_fhir_eob_pages_request(self, get_request_mock):
+        bb = BlueButton(config=MOCK_BB_CONFIG)
+        config = generate_mock_config()
+        response = bb.get_explaination_of_benefit_data(config)
+        self.assertEqual(response["auth_token"], None)
+        self.assertEqual(response["response"].status_code, 200)
+        self.assertEqual(response["response"].json()["id"], "bbb-222-222-222-bbbb")
+        self.assertEqual(response["response"].json()["resourceType"], "Bundle")
+        self.assertEqual(get_request_mock.call_count, 1)
+        # fetch all the pages
 
     @mock.patch("requests.Session", side_effect=success_fhir_profile_request_mock)
     def test_successful_fhir_profile_request(self, get_request_mock):
