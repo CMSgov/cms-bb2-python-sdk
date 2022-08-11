@@ -50,7 +50,7 @@ class AuthorizationToken:
         self.token_type = auth_token_dict.get("token_type")
 
 
-def refresh_auth_token(bb, auth_token):
+def refresh_auth_token(bb, auth_token) -> AuthorizationToken:
     data = {
         "client_id": bb.client_id,
         "grant_type": "refresh_token",
@@ -61,7 +61,7 @@ def refresh_auth_token(bb, auth_token):
     return AuthorizationToken(token_response.json())
 
 
-def generate_authorize_url(bb, auth_data):
+def generate_authorize_url(bb, auth_data) -> str:
     params = {
         "client_id": bb.client_id,
         "redirect_uri": bb.callback_url,
@@ -84,13 +84,13 @@ def base64_url_encode(buffer):
     return buffer_result
 
 
-def get_random_string(length):
+def get_random_string(length) -> str:
     letters = string.ascii_letters + string.digits + string.punctuation
     result = "".join(random.choice(letters) for i in range(length))
     return result
 
 
-def generate_pkce_data():
+def generate_pkce_data() -> dict:
     verifier = generate_random_state(32)
     code_challenge = base64.urlsafe_b64encode(
         hashlib.sha256(verifier.encode("ASCII")).digest()
@@ -98,17 +98,17 @@ def generate_pkce_data():
     return {"code_challenge": code_challenge.decode("utf-8"), "verifier": verifier}
 
 
-def generate_random_state(num):
+def generate_random_state(num) -> str:
     return base64_url_encode(get_random_string(num))
 
 
-def generate_auth_data():
+def generate_auth_data() -> dict:
     auth_data = {"state": generate_random_state(32)}
     auth_data.update(generate_pkce_data())
     return auth_data
 
 
-def get_access_token_from_code(bb, auth_data, callback_code):
+def get_access_token_from_code(bb, auth_data, callback_code) -> dict:
     data = {
         "client_id": bb.client_id,
         "client_secret": bb.client_secret,
