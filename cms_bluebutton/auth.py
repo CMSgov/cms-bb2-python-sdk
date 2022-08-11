@@ -42,8 +42,7 @@ class AuthorizationToken:
                     auth_token_dict.get("expires_at")
                 ).astimezone(datetime.timezone.utc)
         else:
-            self.expires_at = datetime.datetime.now(datetime.timezone.utc)
-            +datetime.timedelta(seconds=self.expires_in)
+            self.expires_at = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(seconds=self.expires_in)
 
         self.patient = auth_token_dict.get("patient")
         self.refresh_token = auth_token_dict.get("refresh_token")

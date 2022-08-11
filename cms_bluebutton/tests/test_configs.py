@@ -59,6 +59,17 @@ def test_valid_config():
     assert bb.client_secret == "<your BB2 client_secret here>"
     assert bb.callback_url == "https://www.fake-prod.com/your/callback/here"
     assert bb.version == 1
+    assert bb.retry_config.get("total") == 3
+    assert bb.retry_config.get("backoff_factor") == 5
+    assert bb.retry_config.get("status_forcelist") == [500, 502, 503, 504]
+
+
+def test_valid_config_w_retry():
+    # valid config sbx
+    bb = BlueButton(config=CONFIGS_DIR + "json/bluebutton-sample-config-valid-w-retry.json")
+    assert bb.retry_config.get("total") == 7
+    assert bb.retry_config.get("backoff_factor") == 10
+    assert bb.retry_config.get("status_forcelist") == [500, 502]
 
 
 def test_config_setting_environment():

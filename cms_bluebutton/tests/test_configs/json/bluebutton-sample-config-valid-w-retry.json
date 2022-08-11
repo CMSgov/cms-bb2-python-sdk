@@ -1,0 +1,12 @@
+{
+    "environment": "PRODUCTION",
+    "client_id": "<your BB2 client_id here>",
+    "client_secret": "<your BB2 client_secret here>",
+    "callback_url": "https://www.fake-prod.com/your/callback/here",
+    "version": 1,
+    "retry_settings": {
+        "total": 7,
+        "backoff_factor": 10,
+        "status_forcelist": [500, 502]
+    }
+}
