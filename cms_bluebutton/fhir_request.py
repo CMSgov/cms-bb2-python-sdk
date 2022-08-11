@@ -1,6 +1,6 @@
 import requests
 from requests.adapters import HTTPAdapter, Retry
-
+from .auth import refresh_auth_token
 from .constants import SDK_HEADERS
 
 
@@ -12,7 +12,9 @@ def fhir_request(bb, config):
         auth_token = new_auth_token
 
     retry_config = Retry(
-        total=3, backoff_factor=5, status_forcelist=[500, 502, 503, 504]
+        total=bb.retry_config.get("total"),
+        backoff_factor=bb.retry_config.get("backoff_factor"),
+        status_forcelist=bb.retry_config.get("status_forcelist")
     )
 
     full_url = "{}/v{}/{}".format(bb.base_url, bb.version, config["url"])
@@ -29,6 +31,6 @@ def fhir_request(bb, config):
 
 def handle_expired(bb, auth_token):
     if auth_token.access_token_expired():
-        return bb.refresh_auth_token(auth_token)
+        return refresh_auth_token(bb, auth_token)
     else:
         return None

@@ -28,6 +28,10 @@ class BlueButton:
         self.client_secret = None
         self.callback_url = None
         self.version = 2  # Default to BB2 version 2
+        # initilized with default
+        self.retry_config = {"total": 3,
+                             "backoff_factor": 5,
+                             "status_forcelist": [500, 502, 503, 504]}
 
         self.base_url = None
 
@@ -88,6 +92,12 @@ class BlueButton:
         self.version = config_dict.get("version", 2)
         self.auth_base_url = "{}/v{}/o/authorize".format(self.base_url, self.version)
         self.auth_token_url = "{}/v{}/o/token/".format(self.base_url, self.version)
+        retrycfg = config_dict.get("retry_settings")
+        if retrycfg:
+            # override default with normalization
+            self.retry_config["total"] = retrycfg.get("total", 3)
+            self.retry_config["backoff_factor"] = retrycfg.get("backoff_factor", 5)
+            self.retry_config["status_forcelist"] = retrycfg.get("status_forcelist", [500, 502, 503, 504])
 
     def get_patient_data(self, config):
         config["url"] = FHIR_RESOURCE_TYPE["Patient"]
