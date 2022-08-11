@@ -19,7 +19,6 @@ auth_token = None
 def get_auth_url():
     redirect_url = bb.generate_authorize_url(auth_data)
     return redirect(redirect_url, code=302)
-    
 
 
 @app.route('/api/bluebutton/callback/', methods=['GET'])
@@ -55,7 +54,21 @@ def authorization_callback():
         print("============== EOB pass auth token =================")
         auth_token = eob_data['auth_token']
         print("============== after EOB request =================")
-        result['eob_data'] = eob_data['response'].json()
+        eob_data = eob_data['response'].json()
+        result['eob_data'] = eob_data
+        # fhir search response could contain large number of resources,
+        # by default they are chunked into pages of 10 resources each,
+        # the response above might be the 1st page of EOBs, it is in the 
+        # format of a FHIR bundle resource with a link section where
+        # page navigation urls such as 'first', 'last', 'self', 'next', 'previous'
+        # might present depending on the current page.
+
+        # Use bb.get_pages(data, config) to get all the pages
+
+        print("============== get pages EOB request =================")
+        eob_pages = bb.get_pages(eob_data, config)
+        result['eob_pages'] = eob_pages['pages']
+        auth_token = eob_pages['auth_token']
         pt_data = bb.get_patient_data(config)
         print("============== Patient pass auth token =================")
         auth_token = pt_data['auth_token']

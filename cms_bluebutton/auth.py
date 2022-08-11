@@ -15,8 +15,7 @@ class AuthorizationToken:
         self.set_dict(auth_token_dict)
 
     def access_token_expired(self):
-        cur_time = datetime.datetime.now(datetime.timezone.utc)
-        return self.expires_at < cur_time
+        return self.expires_at < datetime.datetime.now(datetime.timezone.utc)
 
     def get_dict(self):
         return {

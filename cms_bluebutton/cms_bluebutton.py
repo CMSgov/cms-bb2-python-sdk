@@ -115,6 +115,30 @@ class BlueButton:
         config["url"] = FHIR_RESOURCE_TYPE["Profile"]
         return fhir_request(self, config)
 
+    def extract_page_nav_url(self, data, relation):
+        if data and data['resourceType'] == "Bundle" and data['type'] == "searchset" and data['link']:
+            for lnk in data['link']:
+                if lnk['relation'] == relation:
+                    return lnk['url']
+        return None
+
+    def extract_next_page_url(self, data):
+        return self.extract_page_nav_url(data, 'next')
+
+    def get_pages(self, data, config):
+        bundle = data
+        pages = [bundle]
+        page_url = self.extract_next_page_url(bundle)
+        auth_token = config["auth_token"]
+        while page_url:
+            config["url"] = page_url
+            next_page = fhir_request(self, config)
+            bundle = next_page['response'].json()
+            auth_token = next_page["auth_token"]
+            pages.append(bundle)
+            page_url = self.extract_next_page_url(bundle)
+        return {"auth_token": auth_token, "pages": pages}
+
     def get_custom_data(self, config):
         return fhir_request(self, config)
 

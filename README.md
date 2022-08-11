@@ -178,7 +178,7 @@ def authorization_callback():
     Check the scope
     of the current access token as shown below:
     """
-    scopes = auth_token.scope;
+    scopes = auth_token.scope
 
     # iterate scope entries here or check if a permission is in the scope
     if "patient/Patient.read" in scopes: 
@@ -213,6 +213,22 @@ def authorization_callback():
     try:
         eob_data = bb.get_explaination_of_benefit_data(config)
         result['eob_data'] = eob_data['response'].json()
+        eob_data = eob_data['response'].json()
+        result['eob_data'] = eob_data
+
+        # fhir search response can contain large number of resources,
+        # e.g. it is not unusual an EOB search of a beneficiary would result
+        # in hundreds of EOB resources, by default they are chunked into pages
+        # of 10 resources each, e.g. the above call bb.get_explaination_of_benefit_data(config)
+        # return the 1st page of EOBs, in the format of a FHIR bundle resource
+        # with a link section where page navigation urls with the link name as:
+        # 'first', 'last', 'self', 'next', 'previous', which indicating the 
+        # pagination relation relative to the current page.
+
+        # Use bb.get_pages(data, config) to get all the pages
+        eob_pages = bb.get_pages(eob_data, config)
+        result['eob_pages'] = eob_pages['pages']
+        auth_token = eob_pages['auth_token']
 
         pt_data = bb.get_patient_data(config)
         result['patient_data'] = pt_data['response'].json()

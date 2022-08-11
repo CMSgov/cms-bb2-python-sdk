@@ -72,6 +72,14 @@ def test_valid_config_w_retry():
     assert bb.retry_config.get("status_forcelist") == [500, 502]
 
 
+def test_valid_config_w_retry_disable():
+    # valid config sbx
+    bb = BlueButton(config=CONFIGS_DIR + "json/bluebutton-sample-config-retry-disable.json")
+    assert bb.retry_config.get("total") == 0
+    assert bb.retry_config.get("backoff_factor") == 7
+    assert bb.retry_config.get("status_forcelist") == [500, 502, 508]
+
+
 def test_config_setting_environment():
     for file_name in [
         "json/bluebutton-sample-config-environment-missing.json",
