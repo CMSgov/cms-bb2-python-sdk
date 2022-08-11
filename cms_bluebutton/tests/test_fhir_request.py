@@ -1,8 +1,7 @@
 import json
 import datetime
 import unittest
-from os import listdir
-from os.path import isfile, join, abspath, curdir
+from os.path import abspath, curdir
 from unittest import mock
 from urllib.parse import urlparse, parse_qs
 
@@ -25,17 +24,6 @@ class MockResponse:
 
     def json(self):
         return self.json_data
-
-
-def load_json(fixture_dir):
-    json_resources = []
-    for f in listdir(fixture_dir):
-        full_path = join(fixture_dir, f)
-        if isfile(full_path) and full_path.endswith('.json'):
-            with open(full_path, "r") as f:
-                json_obj = json.load(f)
-                json_resources.append(json_obj)
-    return json_resources
 
 
 class MockSession:
@@ -161,6 +149,7 @@ class TestAPI(unittest.TestCase):
         pages = bb.get_pages(response['response'].json(), config)
         self.assertEqual(pages["auth_token"], None)
         self.assertEqual(len(pages["pages"]), 6)
+        self.assertEqual(get_request_mock.call_count, 5)
 
     @mock.patch("requests.Session", side_effect=success_fhir_profile_request_mock)
     def test_successful_fhir_profile_request(self, get_request_mock):
