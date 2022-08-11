@@ -149,7 +149,7 @@ class TestAPI(unittest.TestCase):
         pages = bb.get_pages(response['response'].json(), config)
         self.assertEqual(pages["auth_token"], None)
         self.assertEqual(len(pages["pages"]), 6)
-        self.assertEqual(get_request_mock.call_count, 5)
+        self.assertEqual(get_request_mock.call_count, 6)
 
     @mock.patch("requests.Session", side_effect=success_fhir_profile_request_mock)
     def test_successful_fhir_profile_request(self, get_request_mock):

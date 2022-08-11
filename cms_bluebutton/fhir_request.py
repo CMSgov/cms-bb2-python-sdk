@@ -11,16 +11,27 @@ def fhir_request(bb, config):
     if new_auth_token is not None:
         auth_token = new_auth_token
 
-    retry_config = Retry(
-        total=bb.retry_config.get("total"),
-        backoff_factor=bb.retry_config.get("backoff_factor"),
-        status_forcelist=bb.retry_config.get("status_forcelist")
-    )
+    url_param = config["url"]
+    full_url = None
 
-    full_url = "{}/v{}/{}".format(bb.base_url, bb.version, config["url"])
+    if url_param.startswith(bb.base_url):
+        # allow full url passed in from config as long as it roots from base url
+        full_url = url_param
+    else:
+        full_url = "{}/v{}/{}".format(bb.base_url, bb.version, config["url"])
+
     headers = SDK_HEADERS
     headers["Authorization"] = "Bearer " + auth_token.access_token
-    adapter = HTTPAdapter(max_retries=retry_config)
+
+    adapter = HTTPAdapter()
+
+    if bb.retry_config.get("total") > 0:
+        adapter = HTTPAdapter(max_retries=Retry(
+            total=bb.retry_config.get("total"),
+            backoff_factor=bb.retry_config.get("backoff_factor"),
+            status_forcelist=bb.retry_config.get("status_forcelist")
+        ))
+
     sesh = requests.Session()
     sesh.mount("https://", adapter)
     sesh.mount("http://", adapter)
