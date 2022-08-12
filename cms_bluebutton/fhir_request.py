@@ -8,10 +8,7 @@ def fhir_request(bb, config):
     auth_token = config["auth_token"]
 
     if bb.token_refresh_on_expire:
-        new_auth_token = handle_expired(bb, auth_token)
-
-        if new_auth_token is not None:
-            auth_token = new_auth_token
+        auth_token = handle_expired(bb, auth_token)
 
     url_param = config["url"]
     full_url = None
@@ -39,11 +36,8 @@ def fhir_request(bb, config):
     sesh.mount("http://", adapter)
     response = sesh.get(url=full_url, params=config["params"], headers=headers)
 
-    return {"auth_token": new_auth_token, "response": response}
+    return {"auth_token": auth_token, "response": response}
 
 
 def handle_expired(bb, auth_token):
-    if auth_token.access_token_expired():
-        return refresh_auth_token(bb, auth_token)
-    else:
-        return None
+    return refresh_auth_token(bb, auth_token) if auth_token.access_token_expired() else auth_token
