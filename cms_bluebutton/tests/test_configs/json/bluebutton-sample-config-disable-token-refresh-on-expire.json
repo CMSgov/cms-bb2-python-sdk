@@ -1,0 +1,8 @@
+{
+    "environment": "PRODUCTION",
+    "client_id": "<your BB2 client_id here>",
+    "client_secret": "<your BB2 client_secret here>",
+    "callback_url": "https://www.fake-prod.com/your/callback/here",
+    "version": 2,
+    "token_refresh_on_expire": false
+}

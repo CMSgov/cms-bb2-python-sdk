@@ -6,10 +6,12 @@ from .constants import SDK_HEADERS
 
 def fhir_request(bb, config):
     auth_token = config["auth_token"]
-    new_auth_token = handle_expired(bb, auth_token)
 
-    if new_auth_token is not None:
-        auth_token = new_auth_token
+    if bb.token_refresh_on_expire:
+        new_auth_token = handle_expired(bb, auth_token)
+
+        if new_auth_token is not None:
+            auth_token = new_auth_token
 
     url_param = config["url"]
     full_url = None
