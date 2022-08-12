@@ -59,6 +59,7 @@ def test_valid_config():
     assert bb.client_secret == "<your BB2 client_secret here>"
     assert bb.callback_url == "https://www.fake-prod.com/your/callback/here"
     assert bb.version == 1
+    assert bb.token_refresh_on_expire
     assert bb.retry_config.get("total") == 3
     assert bb.retry_config.get("backoff_factor") == 5
     assert bb.retry_config.get("status_forcelist") == [500, 502, 503, 504]
@@ -78,6 +79,12 @@ def test_valid_config_w_retry_disable():
     assert bb.retry_config.get("total") == 0
     assert bb.retry_config.get("backoff_factor") == 7
     assert bb.retry_config.get("status_forcelist") == [500, 502, 508]
+
+
+def test_valid_config_w_token_refresh_disable():
+    # valid config sbx
+    bb = BlueButton(config=CONFIGS_DIR + "json/bluebutton-sample-config-disable-token-refresh-on-expire.json")
+    assert not bb.token_refresh_on_expire
 
 
 def test_config_setting_environment():

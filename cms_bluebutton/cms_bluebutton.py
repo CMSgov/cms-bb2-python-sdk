@@ -28,6 +28,7 @@ class BlueButton:
         self.client_secret = None
         self.callback_url = None
         self.version = 2  # Default to BB2 version 2
+        self.token_refresh_on_expire = True
         # initilized with default
         self.retry_config = {"total": 3,
                              "backoff_factor": 5,
@@ -92,6 +93,7 @@ class BlueButton:
         self.version = config_dict.get("version", 2)
         self.auth_base_url = "{}/v{}/o/authorize".format(self.base_url, self.version)
         self.auth_token_url = "{}/v{}/o/token/".format(self.base_url, self.version)
+        self.token_refresh_on_expire = config_dict.get("token_refresh_on_expire", True)
         retrycfg = config_dict.get("retry_settings")
         if retrycfg:
             # override default with normalization
