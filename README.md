@@ -37,17 +37,26 @@ The configuration parameters are:
 - The version number of the API
 - The app's environment (the BB2.0 web location where the app is registered)
 - The FHIR call retry settings
+- Enable / Disable Token refresh if FHIR request processing detected the access token expired
 
-| Parameter    | Value                   | Comments                        |
-| ------------ | ----------------------- | ------------------------------- |
-| environment     | "SANDBOX" or "PRODUCTION"                   | BB2 API environment (default="SANDBOX")
-| version  | 1 or 2 | BB2 API version (default=2)  |
-| client_id     | "foo"                   | oauth2 client id of the app     |
-| client_secret | "bar"                   | oauth2 client secret of the app |
-| callback_url  | "https://www.fake.com/callback" | oauth2 callback URL of the app  |
+| Parameter     | Value                           | Comments                                |
+| ------------- | ------------------------------- | --------------------------------------- |
+| environment   | "SANDBOX" or "PRODUCTION"       | BB2 API environment (default="SANDBOX") |
+| version       | 1 or 2                          | BB2 API version (default=2)             |
+| client_id     | "foo"                           | oauth2 client id of the app             |
+| client_secret | "bar"                           | oauth2 client secret of the app         |
+| callback_url  | "https://www.fake.com/callback" | oauth2 callback URL of the app          |
 
 For application registration and client id and client secret, please refer to:
 [Blue Button 2.0 API Docs - Try the API](https://bluebutton.cms.gov/developers/#try-the-api)
+
+Auth Token Refresh on Expire:
+
+SDK FHIR requests will check if the access token is expired before the data end point call, if the access token is expired, then a token refresh is performed with the refresh token in the current auth token object, this behavior can be disabled by setting configuration parameter as below:
+
+"token_refresh_on_expire": false
+
+By default, token_refresh_on_expire is true.
 
 FHIR requests retry:
 
