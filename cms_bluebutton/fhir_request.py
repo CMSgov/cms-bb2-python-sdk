@@ -6,7 +6,6 @@ from .constants import SDK_HEADERS
 
 def fhir_request(bb, config):
     auth_token = config["auth_token"]
-
     if bb.token_refresh_on_expire:
         auth_token = handle_expired(bb, auth_token)
 
