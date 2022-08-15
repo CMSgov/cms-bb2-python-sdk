@@ -29,6 +29,7 @@ setuptools.setup(
     python_requires=">=3.6",
     install_requires=[
         "requests >= 2.0",
+        "requests-toolbelt >= 0.9.1",
         "pyyaml >= 5.0",
     ],
     extras_require={
