@@ -37,17 +37,26 @@ The configuration parameters are:
 - The version number of the API
 - The app's environment (the BB2.0 web location where the app is registered)
 - The FHIR call retry settings
+- Enable / Disable Token refresh if FHIR request processing detected the access token expired
 
-| Parameter    | Value                   | Comments                        |
-| ------------ | ----------------------- | ------------------------------- |
-| environment     | "SANDBOX" or "PRODUCTION"                   | BB2 API environment (default="SANDBOX")
-| version  | 1 or 2 | BB2 API version (default=2)  |
-| client_id     | "foo"                   | oauth2 client id of the app     |
-| client_secret | "bar"                   | oauth2 client secret of the app |
-| callback_url  | "https://www.fake.com/callback" | oauth2 callback URL of the app  |
+| Parameter     | Value                           | Comments                                |
+| ------------- | ------------------------------- | --------------------------------------- |
+| environment   | "SANDBOX" or "PRODUCTION"       | BB2 API environment (default="SANDBOX") |
+| version       | 1 or 2                          | BB2 API version (default=2)             |
+| client_id     | "foo"                           | oauth2 client id of the app             |
+| client_secret | "bar"                           | oauth2 client secret of the app         |
+| callback_url  | "https://www.fake.com/callback" | oauth2 callback URL of the app          |
 
 For application registration and client id and client secret, please refer to:
 [Blue Button 2.0 API Docs - Try the API](https://bluebutton.cms.gov/developers/#try-the-api)
+
+Auth Token Refresh on Expire:
+
+SDK FHIR requests will check if the access token is expired before the data end point call, if the access token is expired, then a token refresh is performed with the refresh token in the current auth token object, this behavior can be disabled by setting configuration parameter as below:
+
+"token_refresh_on_expire": false
+
+By default, token_refresh_on_expire is true.
 
 FHIR requests retry:
 
@@ -178,7 +187,7 @@ def authorization_callback():
     Check the scope
     of the current access token as shown below:
     """
-    scopes = auth_token.scope;
+    scopes = auth_token.scope
 
     # iterate scope entries here or check if a permission is in the scope
     if "patient/Patient.read" in scopes: 
@@ -213,6 +222,22 @@ def authorization_callback():
     try:
         eob_data = bb.get_explaination_of_benefit_data(config)
         result['eob_data'] = eob_data['response'].json()
+        eob_data = eob_data['response'].json()
+        result['eob_data'] = eob_data
+
+        # fhir search response can contain large number of resources,
+        # e.g. it is not unusual an EOB search of a beneficiary would result
+        # in hundreds of EOB resources, by default they are chunked into pages
+        # of 10 resources each, e.g. the above call bb.get_explaination_of_benefit_data(config)
+        # return the 1st page of EOBs, in the format of a FHIR bundle resource
+        # with a link section where page navigation urls with the link name as:
+        # 'first', 'last', 'self', 'next', 'previous', which indicating the 
+        # pagination relation relative to the current page.
+
+        # Use bb.get_pages(data, config) to get all the pages
+        eob_pages = bb.get_pages(eob_data, config)
+        result['eob_pages'] = eob_pages['pages']
+        auth_token = eob_pages['auth_token']
 
         pt_data = bb.get_patient_data(config)
         result['patient_data'] = pt_data['response'].json()
