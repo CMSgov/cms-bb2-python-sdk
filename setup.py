@@ -35,6 +35,7 @@ setuptools.setup(
     extras_require={
         "dev": [
             "pytest >= 6.0",
+            "requests-mock >= 1.9.3",
         ],
     },
 )
