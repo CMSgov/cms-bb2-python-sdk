@@ -5,8 +5,8 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="cms_bluebutton",
-    version="0.1.0",
+    name="cms-bluebutton-sdk",
+    version="0.1.1",
     author="CMS Blue Button 2.0 Team",
     author_email="bb2@example.com",  # TODO: Do we want to include?
     license="CC0 1.0 Universal",
