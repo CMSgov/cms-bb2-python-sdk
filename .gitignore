@@ -153,6 +153,7 @@ cython_debug/
 
 # Virtual Env
 bb2_env/
+bb2_venv/
 
 # PyCharm
 #  JetBrains specific template is maintainted in a separate JetBrains.gitignore that can
