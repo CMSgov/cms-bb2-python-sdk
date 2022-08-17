@@ -18,9 +18,9 @@ It is intended for BB2 team members or others performing SDK development work.
 
   This should output a 3.x version number.
 
-- You should make use a a virtual environment using the following.
+- You should use a virtual environment.
 
-  - If not already exising, create one with the following commands.
+  - To create a virtual environment and activate it, use the following commands:
 
     ```
     python3 -m venv bb2_venv
@@ -28,7 +28,7 @@ It is intended for BB2 team members or others performing SDK development work.
     # Perform install and commands after sourcing the venv.
     ```
 
-- Install up to date versions of pip, setuptools, wheel and twine.
+- Install current versions of pip, setuptools, wheel and twine.
 
   ```
   # Update PIP
