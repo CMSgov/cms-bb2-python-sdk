@@ -14,6 +14,12 @@ This Python software development kit (SDK) provides tools and resources for deve
 - [Help and Support](#help)
 
 
+## Prerequisites <a name="prerequisites"></a>
+
+You'll need a sandbox account and sample access token to access data from the Blue Button 2.0 API.
+
+To learn how to create a sandbox account and generate a sample access token, see **[Try the API](https://bluebutton.cms.gov/developers/#try-the-api)**.
+
 
 ## Installation <a name="installation"></a>
 
