@@ -1,7 +1,9 @@
 # Python SDK for Blue Button 2.0 API
-This Python software development kit (SDK) provides tools and resources for developers integrating with the [CMS Blue Button 2.0 (BB2.0) API](https://bluebutton.cms.gov/developers/) .
+This Python software development kit (SDK) provides tools and resources for developers integrating with the [CMS Blue Button 2.0 (BB2.0) API](https://bluebutton.cms.gov/developers/).
 
-# Table of contents
+*Note: We do our best to keep the SDKs up-to-date with vulnerability patching.  However, you are responsible for conducting your own review and testing prior to implementation.*
+
+# Table of Contents
 
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
@@ -36,7 +38,7 @@ Required SDK configuration parameters include:
 | `environment` | `SANDBOX` or `PRODUCTION`     |`SANDBOX` | Blue Button 2.0 API environment |
 | `version`       | `1` or `2`                        | `2`  | Blue Button 2.0 version            |
 | `client_id`    | *`foo`*                          | |OAuth2.0 client ID of the app             |
-| `client_secret` | *`bar`*                           | ||OAuth2.0 client secret of the app         |
+| `client_secret` | *`bar`*                           | |OAuth2.0 client secret of the app         |
 | `callback_url`  | *`https://www.example.com/callback`* | |OAuth2.0 callback URL of the app          |
 
 
@@ -99,7 +101,7 @@ Example:
 
 ```
 
-## Configuration methods<a name="configuration-methods"></a>
+## Configuration Methods<a name="configuration-methods"></a>
 There are three ways to configure the SDK when instantiating a `BlueButton` class instance.
 
 ### Python Dictionary
@@ -285,9 +287,10 @@ if __name__ == '__main__':
 
 For a complete Python React sample app, see [CMS Blue Button Python Sample App](https://github.com/CMSgov/bluebutton-sample-client-python-react).
 
+
 ## SDK Development <a name="sdk_devel"></a>
 
-Documentation for BlueButton 2.0 team members and others developing the SDK can be found here:  [README-sdk-dev.md](./README-sdk-dev.md)
+Documentation for BlueButton 2.0 team members and others developing the SDK can be found at [README-sdk-dev.md](./README-sdk-dev.md).
 
 ## About the Blue Button 2.0 API <a name="about"></a>
 
