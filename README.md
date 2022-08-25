@@ -75,20 +75,19 @@ Version data formats:
 
 Sample configuration JSON with default version and environment:
 
-```
+```JSON
 {
   "clientId": "foo",
   "clientSecret": "bar",
   "callbackUrl": "https://www.fake.com/",
 }
-
 ```
 
 If needed, you can set your application's target environment and API version.
 
 Example:
 
-```
+```JSON
 {
   "clientId": "foo",
   "clientSecret": "bar",
@@ -96,17 +95,18 @@ Example:
   "version": "2",
   "environment": "PRODUCTION"
 }
-
 ```
 
 ## Configuration methods<a name="configuration-methods"></a>
 There are three ways to configure the SDK when instantiating a `BlueButton` class instance.
 
 ### Python Dictionary
-    - A dictionary of configuration key:value pairs can be used.
-    - Configuration values can be provided from your own application's configuration method.
-    - Example code:
-      ```python
+
+  - A dictionary of configuration key:value pairs can be used.
+  - Configuration values can be provided from your own application's configuration method.
+  - Example code:
+
+    ```python
       bb = BlueButton({
                "environment": "PRODUCTION",
                "client_id": "foo",
@@ -119,16 +119,19 @@ There are three ways to configure the SDK when instantiating a `BlueButton` clas
                    "status_forcelist": [500, 502, 503, 504]
                }
             }
-      ```
+    ```
 ### JSON config file
-    - This is using a configuration file that is in a JSON format.
-    - This is stored in a local file.
-    - The default location is in the current working directory with a file name: .bluebutton-config.json
-    - Example code:
+
+  - This is using a configuration file that is in a JSON format.
+  - This is stored in a local file.
+  - The default location is in the current working directory with a file name: .bluebutton-config.json
+  - Example code:
+
       ```python
       bb = BlueButton("settings/my_bb2_sdk_conf.json")
       ```
-    - Example JSON in file:
+
+  - Example JSON in file:
       ```json
       {
           "environment": "SANDBOX",
@@ -145,21 +148,24 @@ There are three ways to configure the SDK when instantiating a `BlueButton` clas
       ```
 
 ### YAML config file
-    - This is using a configuration file that is in a YAML format.
-    - This is stored in a local file.
-    - The default location is in the current working directory with a file name: .bluebutton-config.yaml
-    - Example code:
-      ```python
-      bb = BlueButton("settings/my_bb2_sdk_conf.yaml")
-      ```
-    - Example YAML in file:
-      ```yaml
-      environment: "SANDBOX"
-      client_id: "foo"
-      client_secret: "bar"
-      callback_url: "https://www.fake.com/callback"
-      version: 2
-      ```
+
+  - This is using a configuration file that is in a YAML format.
+  - This is stored in a local file.
+  - The default location is in the current working directory with a file name: .bluebutton-config.yaml
+  - Example code:
+
+    ```python
+    bb = BlueButton("settings/my_bb2_sdk_conf.yaml")
+    ```
+  - Example YAML in file:
+
+    ```yaml
+    environment: "SANDBOX"
+    client_id: "foo"
+    client_secret: "bar"
+    callback_url: "https://www.fake.com/callback"
+    version: 2
+    ```
 
 ## Sample Usage: Obtain Access Grant, Probe Scope, and Access Data <a name="usages"></a>
 
