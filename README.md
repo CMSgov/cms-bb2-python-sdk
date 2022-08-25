@@ -1,7 +1,6 @@
 # Python SDK for Blue Button 2.0 API
 This Python software development kit (SDK) provides tools and resources for developers integrating with the [CMS Blue Button 2.0 (BB2.0) API](https://bluebutton.cms.gov/developers/).
 
-*Note: We do our best to keep the SDKs up-to-date with vulnerability patching.  However, you are responsible for conducting your own review and testing prior to implementation.*
 
 # Table of Contents
 
@@ -77,19 +76,20 @@ Version data formats:
 
 Sample configuration JSON with default version and environment:
 
-```JSON
+```
 {
   "clientId": "foo",
   "clientSecret": "bar",
   "callbackUrl": "https://www.fake.com/",
 }
+
 ```
 
 If needed, you can set your application's target environment and API version.
 
 Example:
 
-```JSON
+```
 {
   "clientId": "foo",
   "clientSecret": "bar",
@@ -97,18 +97,17 @@ Example:
   "version": "2",
   "environment": "PRODUCTION"
 }
+
 ```
 
 ## Configuration Methods<a name="configuration-methods"></a>
 There are three ways to configure the SDK when instantiating a `BlueButton` class instance.
 
 ### Python Dictionary
-
-  - A dictionary of configuration key:value pairs can be used.
-  - Configuration values can be provided from your own application's configuration method.
-  - Example code:
-
-    ```python
+    - A dictionary of configuration key:value pairs can be used.
+    - Configuration values can be provided from your own application's configuration method.
+    - Example code:
+      ```python
       bb = BlueButton({
                "environment": "PRODUCTION",
                "client_id": "foo",
@@ -121,19 +120,16 @@ There are three ways to configure the SDK when instantiating a `BlueButton` clas
                    "status_forcelist": [500, 502, 503, 504]
                }
             }
-    ```
+      ```
 ### JSON config file
-
-  - This is using a configuration file that is in a JSON format.
-  - This is stored in a local file.
-  - The default location is in the current working directory with a file name: .bluebutton-config.json
-  - Example code:
-
+    - This is using a configuration file that is in a JSON format.
+    - This is stored in a local file.
+    - The default location is in the current working directory with a file name: .bluebutton-config.json
+    - Example code:
       ```python
       bb = BlueButton("settings/my_bb2_sdk_conf.json")
       ```
-
-  - Example JSON in file:
+    - Example JSON in file:
       ```json
       {
           "environment": "SANDBOX",
@@ -150,24 +146,21 @@ There are three ways to configure the SDK when instantiating a `BlueButton` clas
       ```
 
 ### YAML config file
-
-  - This is using a configuration file that is in a YAML format.
-  - This is stored in a local file.
-  - The default location is in the current working directory with a file name: .bluebutton-config.yaml
-  - Example code:
-
-    ```python
-    bb = BlueButton("settings/my_bb2_sdk_conf.yaml")
-    ```
-  - Example YAML in file:
-
-    ```yaml
-    environment: "SANDBOX"
-    client_id: "foo"
-    client_secret: "bar"
-    callback_url: "https://www.fake.com/callback"
-    version: 2
-    ```
+    - This is using a configuration file that is in a YAML format.
+    - This is stored in a local file.
+    - The default location is in the current working directory with a file name: .bluebutton-config.yaml
+    - Example code:
+      ```python
+      bb = BlueButton("settings/my_bb2_sdk_conf.yaml")
+      ```
+    - Example YAML in file:
+      ```yaml
+      environment: "SANDBOX"
+      client_id: "foo"
+      client_secret: "bar"
+      callback_url: "https://www.fake.com/callback"
+      version: 2
+      ```
 
 ## Sample Usage: Obtain Access Grant, Probe Scope, and Access Data <a name="usages"></a>
 
@@ -301,6 +294,11 @@ Documentation for BlueButton 2.0 team members and others developing the SDK can 
 ## About the Blue Button 2.0 API <a name="about"></a>
 
 The [Blue Button 2.0 API](https://bluebutton.cms.gov/) provides Medicare enrollee claims data to applications using the [OAuth2.0 authorization flow](https://datatracker.ietf.org/doc/html/rfc6749). We aim to provide a developer-friendly, standards-based API that enables people with Medicare to connect their claims data to the applications, services, and research programs they trust.
+
+## License
+The CMS Blue Button 2.0 Python SDK is licensed under the Creative Commons Zero v1.0 Universal. For more details, see [License](https://github.com/CMSgov/cms-bb2-python-sdk/blob/main/LICENSE).
+
+*Note: We do our best to keep our SDKs up to date with vulnerability patching, but you are responsible for conducting your own review and testing before implementation.*
 
 ## Help and Support <a name="help"></a>
 
