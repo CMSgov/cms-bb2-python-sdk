@@ -12,6 +12,7 @@ This Python software development kit (SDK) provides tools and resources for deve
 - [Sample App](#sample-app)
 - [SDK Development](#sdk_devel)
 - [About](#about)
+- [License](#license)
 - [Help and Support](#help)
 
 
@@ -295,7 +296,7 @@ Documentation for BlueButton 2.0 team members and others developing the SDK can 
 
 The [Blue Button 2.0 API](https://bluebutton.cms.gov/) provides Medicare enrollee claims data to applications using the [OAuth2.0 authorization flow](https://datatracker.ietf.org/doc/html/rfc6749). We aim to provide a developer-friendly, standards-based API that enables people with Medicare to connect their claims data to the applications, services, and research programs they trust.
 
-## License
+## License<a name="license"></a>
 The CMS Blue Button 2.0 Python SDK is licensed under the Creative Commons Zero v1.0 Universal. For more details, see [License](https://github.com/CMSgov/cms-bb2-python-sdk/blob/main/LICENSE).
 
 *Note: We do our best to keep our SDKs up to date with vulnerability patching, but you are responsible for conducting your own review and testing before implementation.*
