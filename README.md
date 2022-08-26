@@ -1,24 +1,26 @@
-# Blue Button API SDK (Python)
+# Python SDK for Blue Button 2.0 API
+This Python software development kit (SDK) provides tools and resources for developers integrating with the [CMS Blue Button 2.0 (BB2.0) API](https://bluebutton.cms.gov/developers/).
 
-# Table of contents
 
-1. [Descritpion](#description)
-2. [Installation](#installation)
-3. [Configuration](#configuration)
-4. [Usages: Obtain Access Grant, Probe Scope, and Access Data](#usages)
-5. [A Complete Sample App](#samples)
-6. [API Versions and Environments](#versions_and_environments)
-7. [SDK Development](#sdk_devel)
+# Table of Contents
 
-## Description <a name="description"></a>
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Configuration Parameters](#configuration-parameters)
+- [Configuration Methods](#configuration-methods)
+- [Usage](#usage)
+- [Sample App](#sample-app)
+- [SDK Development](#sdk_devel)
+- [About](#about)
+- [Help and Support](#help)
 
-This is an SDK for interacting with the [CMS Blue Button 2.0 API](https://bluebutton.cms.gov/developers/).
-The API allows applications to obtain a beneficiary's (who has login account with medicare.gov) grant
-to access their medicare claims data - through the OAuth 2.0 [(RFC 6749)](https://datatracker.ietf.org/doc/html/rfc6749) authorization flow.
 
-By using the SDK, the development of applications accessing the Blue Button 2.0 API can be greatly simplified.
+## Prerequisites <a name="prerequisites"></a>
 
-Note: In following OAuth 2.0 best practices, the PKCE extension [(RFC 7636)](https://datatracker.ietf.org/doc/html/rfc7636) is always enabled.
+You'll need a sandbox account and sample access token to access data from the Blue Button 2.0 API.
+
+To learn how to create a sandbox account and generate a sample access token, see **[Try the API](https://bluebutton.cms.gov/developers/#try-the-api)**.
+
 
 ## Installation <a name="installation"></a>
 
@@ -26,59 +28,82 @@ Note: In following OAuth 2.0 best practices, the PKCE extension [(RFC 7636)](htt
 $ pip install cms-bluebutton-sdk
 ```
 
-## Configuration <a name="configuration"></a>
+## Configuration Parameters<a name="configuration-parameters"></a>
 
-The SDK needs to be properly configured to work.
+Required SDK configuration parameters include:
 
-The configuration parameters are:
+| Parameter     | Value                           | Default |Description                                |
+| ------------- | ------------------------------- |----| --------------------------------------- |
+| `environment` | `SANDBOX` or `PRODUCTION`     |`SANDBOX` | Blue Button 2.0 API environment |
+| `version`       | `1` or `2`                        | `2`  | Blue Button 2.0 version            |
+| `client_id`    | *`foo`*                          | |OAuth2.0 client ID of the app             |
+| `client_secret` | *`bar`*                           | |OAuth2.0 client secret of the app         |
+| `callback_url`  | *`https://www.example.com/callback`* | |OAuth2.0 callback URL of the app          |
 
-- The app's credentials - client id, client secret
-- The app's callback url
-- The version number of the API
-- The app's environment (the BB2.0 web location where the app is registered)
-- The FHIR call retry settings
-- Enable / Disable Token refresh if FHIR request processing detected the access token expired
 
-| Parameter     | Value                           | Comments                                |
-| ------------- | ------------------------------- | --------------------------------------- |
-| environment   | "SANDBOX" or "PRODUCTION"       | BB2 API environment (default="SANDBOX") |
-| version       | 1 or 2                          | BB2 API version (default=2)             |
-| client_id     | "foo"                           | oauth2 client id of the app             |
-| client_secret | "bar"                           | oauth2 client secret of the app         |
-| callback_url  | "https://www.fake.com/callback" | oauth2 callback URL of the app          |
+### Access Token Refresh on Expire
+SDK FHIR requests check whether the access token is expired before the data end point call. By default, if the access token is expired, the token in the current token object refreshes. Disable token refresh by setting `token_refresh_on_expire` to `false`. 
 
-For application registration and client id and client secret, please refer to:
-[Blue Button 2.0 API Docs - Try the API](https://bluebutton.cms.gov/developers/#try-the-api)
+### FHIR Requests Retry Settings
 
-Auth Token Refresh on Expire:
+Retry is enabled by default for FHIR requests. The folllowing parameters are available for exponential back off retry algorithm.
 
-SDK FHIR requests will check if the access token is expired before the data end point call, if the access token is expired, then a token refresh is performed with the refresh token in the current auth token object, this behavior can be disabled by setting configuration parameter as below:
-
-"token_refresh_on_expire": false
-
-By default, token_refresh_on_expire is true.
-
-FHIR requests retry:
-
-Retry is enabled by default for FHIR requests, retry_settings: parameters for exponential back off retry algorithm
-
-| retry parameter   | value (default)      | Comments                         |
+| Retry parameter   | Value (default)      | Description                         |
 | ----------------- | -------------------- | -------------------------------- |
-| backoff_factor    | 5                    | back off factor in seconds       |
-| total             | 3                    | max retries                      |
-| status_forcelist  | [500, 502, 503, 504] | error response codes to retry on |
+| `backoff_factor`    | `5`                    | Backoff factor in seconds       |
+| `total `            | `3`                    | Max retries                      |
+| `status_forcelist`  | [`500`, `502`, `503`, `504`] | Error response codes to retry on |
 
-the exponential back off factor (in seconds) is used to calculate interval between retries by below formular, where i starts from 0:
+The exponential backoff factor (in seconds) is used to calculate interval between retries using the formula `backoff_factor * (2 ** (i - 1))` where `i` starts from 0.
 
-backoff factor * (2 ** (i - 1))
+Example:
 
-e.g. for backoff_factor is 5 seconds, it will generate wait intervals: 2.5, 5, 10, ...
+A`backoff_factor` of 5 seconds generates the wait intervals: 2.5, 5, 10, ...
 
-to disable the retry: set total = 0
+To disable the retry, set `total = 0`
 
-There are three ways to configure the SDK when instantiating a `BlueButton` class instance:
+### Environments and Data
 
-  * Python Dictionary:
+The Blue Button 2.0 API is available in V1 and V2 in a sandbox and production environment.
+
+- Sandbox location: https://sandbox.bluebutton.cms.gov
+- Production location: https://api.bluebutton.cms.gov
+
+Version data formats:
+
+- V1: FHIR STU2
+- V2: FHIR R4
+
+Sample configuration JSON with default version and environment:
+
+```
+{
+  "clientId": "foo",
+  "clientSecret": "bar",
+  "callbackUrl": "https://www.fake.com/",
+}
+
+```
+
+If needed, you can set your application's target environment and API version.
+
+Example:
+
+```
+{
+  "clientId": "foo",
+  "clientSecret": "bar",
+  "callbackUrl": "https://www.fake.com/",
+  "version": "2",
+  "environment": "PRODUCTION"
+}
+
+```
+
+## Configuration Methods<a name="configuration-methods"></a>
+There are three ways to configure the SDK when instantiating a `BlueButton` class instance.
+
+### Python Dictionary
     - A dictionary of configuration key:value pairs can be used.
     - Configuration values can be provided from your own application's configuration method.
     - Example code:
@@ -96,7 +121,7 @@ There are three ways to configure the SDK when instantiating a `BlueButton` clas
                }
             }
       ```
-  * JSON config file:
+### JSON config file
     - This is using a configuration file that is in a JSON format.
     - This is stored in a local file.
     - The default location is in the current working directory with a file name: .bluebutton-config.json
@@ -120,7 +145,7 @@ There are three ways to configure the SDK when instantiating a `BlueButton` clas
       }
       ```
 
-  * YAML config file:
+### YAML config file
     - This is using a configuration file that is in a YAML format.
     - This is stored in a local file.
     - The default location is in the current working directory with a file name: .bluebutton-config.yaml
@@ -139,7 +164,7 @@ There are three ways to configure the SDK when instantiating a `BlueButton` clas
 
 ## Sample Usage: Obtain Access Grant, Probe Scope, and Access Data <a name="usages"></a>
 
-Below are psuedo code snippets showing SDK used with python server and flask.
+Below are code snippets showing the SDK used with Python server and Flask.
 
 ```python
 from flask import Flask
@@ -257,39 +282,24 @@ if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=3001)
 ```
 
-## A Complete Sample App <a name="samples"></a>
+## Sample App <a name="samples"></a>
 
-A Python React sample app can be found at:
-[CMS Blue Button Python Sample App](https://github.com/CMSgov/bluebutton-sample-client-python-react)
+For a complete Python React sample app, see [CMS Blue Button Python Sample App](https://github.com/CMSgov/bluebutton-sample-client-python-react).
 
-## API Versions and Environments <a name="versions_and_environments"></a>
-
-Can be selected for environments: PRODUCTION and SANDBOX.
-
-The Blue Button API is available in versions v1 and v2.
-
-The data served from v1 is in FHIR STU2 format, and data from v2 is in FHIR R4 format.
-
-An application's target environment and API version can be set in the SDK configuration as shown by the JSON example below:
-
-```json
-{
-  "clientId": "foo",
-  "clientSecret": "bar",
-  "callbackUrl": "https://www.fake.com/",
-  "version": "2",
-  "environment": "PRODUCTION"
-}
-```
-
-If not included, the default API version is v2, and the default environment is SANDBOX.
-
-Web location of the environments:
-
-[PRODUCTION Environment: https://api.bluebutton.cms.gov](https://api.bluebutton.cms.gov)
-
-[SANDBOX Environment: https://sandbox.bluebutton.cms.gov](https://sandbox.bluebutton.cms.gov)
 
 ## SDK Development <a name="sdk_devel"></a>
 
-Documentation for BB2 team members and others developing the SDK can be found here:  [README-sdk-dev.md](./README-sdk-dev.md)
+Documentation for BlueButton 2.0 team members and others developing the SDK can be found at [README-sdk-dev.md](./README-sdk-dev.md).
+
+## About the Blue Button 2.0 API <a name="about"></a>
+
+The [Blue Button 2.0 API](https://bluebutton.cms.gov/) provides Medicare enrollee claims data to applications using the [OAuth2.0 authorization flow](https://datatracker.ietf.org/doc/html/rfc6749). We aim to provide a developer-friendly, standards-based API that enables people with Medicare to connect their claims data to the applications, services, and research programs they trust.
+
+## License
+The CMS Blue Button 2.0 Python SDK is licensed under the Creative Commons Zero v1.0 Universal. For more details, see [License](https://github.com/CMSgov/cms-bb2-python-sdk/blob/main/LICENSE).
+
+*Note: We do our best to keep our SDKs up to date with vulnerability patching, but you are responsible for conducting your own review and testing before implementation.*
+
+## Help and Support <a name="help"></a>
+
+Got questions? Need help troubleshooting? Want to propose a new feature? Contact the Blue Button 2.0 team and connect with the community in our [Google Group](https://groups.google.com/forum/#!forum/Developer-group-for-cms-blue-button-api).
