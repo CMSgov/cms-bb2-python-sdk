@@ -59,7 +59,7 @@ The exponential backoff factor (in seconds) is used to calculate interval betwee
 
 Example:
 
-A`backoff_factor` of 5 seconds generates the wait intervals: 2.5, 5, 10, ...
+A `backoff_factor` of 5 seconds generates the wait intervals: 2.5, 5, 10, ...
 
 To disable the retry, set `total = 0`
 
@@ -79,9 +79,9 @@ Sample configuration JSON with default version and environment:
 
 ```
 {
-  "clientId": "foo",
-  "clientSecret": "bar",
-  "callbackUrl": "https://www.fake.com/",
+  "client_id": "foo",
+  "client_secret": "bar",
+  "callback_url": "https://www.fake.com/",
 }
 
 ```
@@ -92,9 +92,9 @@ Example:
 
 ```
 {
-  "clientId": "foo",
-  "clientSecret": "bar",
-  "callbackUrl": "https://www.fake.com/",
+  "client_id": "foo",
+  "client_secret": "bar",
+  "callback_url": "https://www.fake.com/",
   "version": "2",
   "environment": "PRODUCTION"
 }
