@@ -37,9 +37,9 @@ Required SDK configuration parameters include:
 | ------------- | ------------------------------- |----| --------------------------------------- |
 | `environment` | `SANDBOX` or `PRODUCTION`     |`SANDBOX` | Blue Button 2.0 API environment |
 | `version`       | `1` or `2`                        | `2`  | Blue Button 2.0 version            |
-| `client_id`    | *`foo`*                          | |OAuth2.0 client ID of the app             |
-| `client_secret` | *`bar`*                           | |OAuth2.0 client secret of the app         |
-| `callback_url`  | *`https://www.example.com/callback`* | |OAuth2.0 callback URL of the app          |
+| `client_id`    | *`your_client_id`*                          | |OAuth2.0 client ID of your app             |
+| `client_secret` | *`your_client_secret`*                           | |OAuth2.0 client secret of your app         |
+| `callback_url`  | *`https://www.example.com/callback`* | |OAuth2.0 callback URL of your app          |
 
 
 ### Access Token Refresh on Expire
@@ -47,7 +47,7 @@ SDK FHIR requests check whether the access token is expired before the data end 
 
 ### FHIR Requests Retry Settings
 
-Retry is enabled by default for FHIR requests. The folllowing parameters are available for exponential back off retry algorithm.
+Retry is enabled by default for FHIR requests. The folllowing parameters are available for the exponential back off retry algorithm.
 
 | Retry parameter   | Value (default)      | Description                         |
 | ----------------- | -------------------- | -------------------------------- |
@@ -220,7 +220,7 @@ def authorization_callback():
         # patient info access granted
 
     """
-    1. access token scope where demagraphic info included:
+    1. access token scope where demographic info included:
     
     scope: [
        "patient/Coverage.read",
@@ -251,16 +251,16 @@ def authorization_callback():
         eob_data = eob_data['response'].json()
         result['eob_data'] = eob_data
 
-        # fhir search response can contain large number of resources,
-        # e.g. it is not unusual an EOB search of a beneficiary would result
-        # in hundreds of EOB resources, by default they are chunked into pages
-        # of 10 resources each, e.g. the above call bb.get_explaination_of_benefit_data(config)
-        # return the 1st page of EOBs, in the format of a FHIR bundle resource
-        # with a link section where page navigation urls with the link name as:
-        # 'first', 'last', 'self', 'next', 'previous', which indicating the 
-        # pagination relation relative to the current page.
-
-        # Use bb.get_pages(data, config) to get all the pages
+        # A FHIR search response can result in a large number of resources. 
+        # For example, an EOB search of a beneficiary could return hundreds 
+        # of resources. By default, search results are grouped into
+        # pages with 10 resources each. For example, 
+        # bb.get_explaination_of_benefit_data(config) returns the
+        # first page of resources as a FHIR bundle with a link section 
+        # of page navigation URLs. Pagination link names include 
+        # 'first,' 'last,' 'self,' next,' and 'previous.' 
+        # To get all the pages, use bb.get_pages(data, config).
+        
         eob_pages = bb.get_pages(eob_data, config)
         result['eob_pages'] = eob_pages['pages']
         auth_token = eob_pages['auth_token']
@@ -299,7 +299,7 @@ The [Blue Button 2.0 API](https://bluebutton.cms.gov/) provides Medicare enrolle
 ## License<a name="license"></a>
 The CMS Blue Button 2.0 Python SDK is licensed under the Creative Commons Zero v1.0 Universal. For more details, see [License](https://github.com/CMSgov/cms-bb2-python-sdk/blob/main/LICENSE).
 
-*Note: We do our best to keep our SDKs up to date with vulnerability patching, but you are responsible for conducting your own review and testing before implementation.*
+*Note: We do our best to keep our SDKs up to date with vulnerability patching and security testing, but you are responsible for your own review and testing before implementation.*
 
 ## Help and Support <a name="help"></a>
 
