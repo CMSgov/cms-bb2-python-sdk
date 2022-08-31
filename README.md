@@ -26,7 +26,7 @@ To learn how to create a sandbox account and generate a sample access token, see
 ## Installation <a name="installation"></a>
 
 ```bash
-$ pip install cms-bluebutton-sdk
+pip install cms-bluebutton-sdk
 ```
 
 ## Configuration Parameters<a name="configuration-parameters"></a>
@@ -79,9 +79,9 @@ Sample configuration JSON with default version and environment:
 
 ```
 {
-  "client_id": "foo",
-  "client_secret": "bar",
-  "callback_url": "https://www.fake.com/",
+  "client_id": "your_client_id",
+  "client_secret": "your_client_secret",
+  "callback_url": "https://www.example.com/",
 }
 
 ```
@@ -92,9 +92,9 @@ Example:
 
 ```
 {
-  "client_id": "foo",
-  "client_secret": "bar",
-  "callback_url": "https://www.fake.com/",
+  "client_id": "your_client_id",
+  "client_secret": "your_client_secret",
+  "callback_url": "https://www.example.com/",
   "version": "2",
   "environment": "PRODUCTION"
 }
@@ -111,9 +111,9 @@ There are three ways to configure the SDK when instantiating a `BlueButton` clas
       ```python
       bb = BlueButton({
                "environment": "PRODUCTION",
-               "client_id": "foo",
-               "client_secret": "bar",
-               "callback_url": "https://www.fake.com/callback",
+               "client_id": "your_client_id",
+               "client_secret": "your_client_secret",
+               "callback_url": "https://www.example.com/callback",
                "version": 2,
                "retry_settings": {
                    "total": 3,
@@ -134,9 +134,9 @@ There are three ways to configure the SDK when instantiating a `BlueButton` clas
       ```json
       {
           "environment": "SANDBOX",
-          "client_id": "foo",
-          "client_secret": "bar",
-          "callback_url": "https://www.fake.com/callback",
+          "client_id": "your_client_id",
+          "client_secret": "your_client_secret",
+          "callback_url": "https://www.example.com/callback",
           "version": 2,
           "retry_settings": {
               "total": 3,
@@ -157,9 +157,9 @@ There are three ways to configure the SDK when instantiating a `BlueButton` clas
     - Example YAML in file:
       ```yaml
       environment: "SANDBOX"
-      client_id: "foo"
-      client_secret: "bar"
-      callback_url: "https://www.fake.com/callback"
+      client_id: "id"
+      client_secret: "your_client_secret"
+      callback_url: "https://www.example.com/callback"
       version: 2
       ```
 
