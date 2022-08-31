@@ -26,7 +26,7 @@ To learn how to create a sandbox account and generate a sample access token, see
 ## Installation <a name="installation"></a>
 
 ```bash
-$ pip3 install cms-bluebutton-sdk
+pip3 install cms-bluebutton-sdk
 ```
 
 ## Configuration Parameters<a name="configuration-parameters"></a>
