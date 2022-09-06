@@ -43,7 +43,7 @@ Required SDK configuration parameters include:
 
 
 ### Access Token Refresh on Expire
-SDK FHIR requests check whether the access token is expired before the data end point call. By default, if the access token is expired, the token in the current token object refreshes. Disable token refresh by setting `token_refresh_on_expire` to `false`. 
+SDK FHIR requests check whether the access token is expired before the data endpoint call. By default, an expired token will refresh. To disable token refresh, set `token_refresh_on_expire` to `false`.
 
 ### FHIR Requests Retry Settings
 
@@ -287,10 +287,6 @@ if __name__ == '__main__':
 
 For a complete Python React sample app, see [CMS Blue Button Python Sample App](https://github.com/CMSgov/bluebutton-sample-client-python-react).
 
-
-## SDK Development <a name="sdk_devel"></a>
-
-Documentation for BlueButton 2.0 team members and others developing the SDK can be found at [README-sdk-dev.md](./README-sdk-dev.md).
 
 ## About the Blue Button 2.0 API <a name="about"></a>
 
