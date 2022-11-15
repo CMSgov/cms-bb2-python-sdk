@@ -96,7 +96,7 @@ The resulting distribution files with be created in the `dist/` directory.
 - Review the files included with the following. Update the filename for the target version.
 
   ```
-  unzip -l dist/cms_bluebutton_sdk-0.1.0-py3-none-any.whl 
+  unzip -l dist/cms_bluebutton_sdk-1.0.0-py3-none-any.whl 
   ```
 
 
@@ -105,7 +105,7 @@ The resulting distribution files with be created in the `dist/` directory.
 The package file can be installed via the following command:
 
 ```bash
-pip install dist/cms_bluebutton_sdk-0.1.0-py3-none-any.whl # wheel
+pip install dist/cms_bluebutton_sdk-1.0.0-py3-none-any.whl # wheel
 ```
 
 
