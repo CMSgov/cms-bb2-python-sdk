@@ -73,7 +73,7 @@ The Blue Button 2.0 API is available in V1 and V2 in a sandbox and production en
 
 Version data formats:
 
-- V1: FHIR STU2
+- V1: FHIR STU3
 - V2: FHIR R4
 
 Sample configuration JSON with default version and environment:
