@@ -178,11 +178,20 @@ For example with target version = 1.0.0:
   # Perform install and commands after sourcing the venv.
   ```
 
+- Remove the package, if it is already installed.
+
+    ```bash
+    pip show cms-bluebutton-sdk
+    pip uninstall cms-bluebutton-sdk
+
+    ```
+
 - Install `cms-bluebutton-sdk` from TestPyPI. Extras are installed from the main PyPI registry.
 
   ```bash
   pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ cms-bluebutton-sdk
   ```
+
 
 - Show the installed package.
 
@@ -192,12 +201,12 @@ For example with target version = 1.0.0:
 
 - Test imports with the following.
 
-  ```bash
-  cat <<EOF >test_bb2_sdk.py
-  from cms_bluebutton import BlueButton, AuthorizationToken
-  EOF
-  python test_bb2_sdk.py 
-  ```
+```bash
+cat <<EOF >test_bb2_sdk.py
+from cms_bluebutton import BlueButton, AuthorizationToken
+EOF
+python test_bb2_sdk.py 
+```
 
   - If successful, there will be no errors in the output.
 
