@@ -141,11 +141,14 @@ See the following for more details:  https://packaging.python.org/en/latest/guid
 
 #### Upload project to TestPyPI
 
+- In your user account settings, add an API token or use one that is already available to the team.
+
 - Setup your configuration by adding the following lines to your $HOME/.pypirc file:
 
   ```
   [testpypi]
-  username = <your TestPyPI username>
+  username = __token__
+  password = # either a user-scoped token or a project-scoped token you want to set as the default
   ```
 
 - Source the virtual environment from previous instruction.
@@ -154,13 +157,13 @@ See the following for more details:  https://packaging.python.org/en/latest/guid
     source bb2_venv/bin/activate
   ```
 
-- Upload to the TestPyPI registry with the following command:
+- Upload to the TestPyPI registry with the following command for your intended version.
+
+For example with target version = 1.0.0:
 
   ```bash
-  twine upload --repository testpypi dist/cms_bluebutton_sdk-0.1.0-py3-none-any.whl
+  twine upload --repository testpypi dist/cms_bluebutton_sdk-1.0.0-py3-none-any.whl
   ```
-
-  Enter the account password.
 
 - Confirm the project was uploaded via the following URL: https://test.pypi.org/project/cms-bluebutton-sdk
 
