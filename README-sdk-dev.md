@@ -141,11 +141,14 @@ See the following for more details:  https://packaging.python.org/en/latest/guid
 
 #### Upload project to TestPyPI
 
+- In your user account settings, add an API token or use one that is already available to the team.
+
 - Setup your configuration by adding the following lines to your $HOME/.pypirc file:
 
   ```
   [testpypi]
-  username = <your TestPyPI username>
+  username = __token__
+  password = # either a user-scoped token or a project-scoped token you want to set as the default
   ```
 
 - Source the virtual environment from previous instruction.
@@ -154,13 +157,13 @@ See the following for more details:  https://packaging.python.org/en/latest/guid
     source bb2_venv/bin/activate
   ```
 
-- Upload to the TestPyPI registry with the following command:
+- Upload to the TestPyPI registry with the following command for your intended version.
+
+For example with target version = 1.0.0:
 
   ```bash
-  twine upload --repository testpypi dist/cms_bluebutton_sdk-0.1.0-py3-none-any.whl
+  twine upload --repository testpypi dist/cms_bluebutton_sdk-1.0.0-py3-none-any.whl
   ```
-
-  Enter the account password.
 
 - Confirm the project was uploaded via the following URL: https://test.pypi.org/project/cms-bluebutton-sdk
 
@@ -175,11 +178,20 @@ See the following for more details:  https://packaging.python.org/en/latest/guid
   # Perform install and commands after sourcing the venv.
   ```
 
+- Remove the package, if it is already installed.
+
+    ```bash
+    pip show cms-bluebutton-sdk
+    pip uninstall cms-bluebutton-sdk
+
+    ```
+
 - Install `cms-bluebutton-sdk` from TestPyPI. Extras are installed from the main PyPI registry.
 
   ```bash
   pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ cms-bluebutton-sdk
   ```
+
 
 - Show the installed package.
 
@@ -189,12 +201,12 @@ See the following for more details:  https://packaging.python.org/en/latest/guid
 
 - Test imports with the following.
 
-  ```bash
-  cat <<EOF >test_bb2_sdk.py
-  from cms_bluebutton import BlueButton, AuthorizationToken
-  EOF
-  python test_bb2_sdk.py 
-  ```
+```bash
+cat <<EOF >test_bb2_sdk.py
+from cms_bluebutton import BlueButton, AuthorizationToken
+EOF
+python test_bb2_sdk.py 
+```
 
   - If successful, there will be no errors in the output.
 
@@ -222,11 +234,14 @@ See the following for more details:  https://pypi.org/
 
 #### Upload project to PyPI
 
+- In your user account settings, add an API token or use one that is already available to the team.
+
 - Setup your configuration by adding the following lines to your $HOME/.pypirc file:
 
   ```
   [pypi]
-  username = <your PyPI username>
+  username = __token__
+  password = # either a user-scoped token or a project-scoped token you want to set as the default
   ```
 
 - Source the virtual environment from previous instruction.
@@ -238,10 +253,8 @@ See the following for more details:  https://pypi.org/
 - Upload to the PyPI registry with the following command. Update the filename for the target version.
 
   ```bash
-  twine upload dist/cms_bluebutton_sdk-0.1.0-py3-none-any.whl
+  twine upload dist/cms_bluebutton_sdk-1.0.0-py3-none-any.whl
   ```
-
-  Enter the account password.
 
 - Confirm the project was uploaded at the following URL: https://pypi.org/project/cms-bluebutton-sdk
 
@@ -270,13 +283,13 @@ See the following for more details:  https://pypi.org/
 
 - Test imports with the following.
 
-  ```bash
-  cat <<EOF
-  from cms_bluebutton import BlueButton, AuthorizationToken
-  print("IMPORT TEST SUCCESSFUL!!!")
-  EOF
-  python test_bb2_sdk.py 
-  ```
+```bash
+cat <<EOF
+from cms_bluebutton import BlueButton, AuthorizationToken
+print("IMPORT TEST SUCCESSFUL!!!")
+EOF
+python test_bb2_sdk.py 
+```
 
   - If successful, there will be no errors and the following message will output:
 
@@ -294,9 +307,11 @@ New versions can be published using the previous build, TestPyPI and PyPI publis
 
 Before building and publishing a new version, the version number needs to be increased.
 
+NOTE: Once a file is uploaded, it can not be replaced with a new file. A new version is needed per:  https://test.pypi.org/help/#file-name-reuse
+
 To do this, edit the following line in the `setup.py` file with the desired release version:
 
 ```
-    version="0.1.0",
+    version="1.0.0",
 ```
 
