@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="cms-bluebutton-sdk",
-    version="1.0.0",
+    version="1.0.1",
     author="CMS Blue Button 2.0 Team",
     author_email="BlueButtonAPI@cms.hhs.gov",
     license="CC0 1.0 Universal",

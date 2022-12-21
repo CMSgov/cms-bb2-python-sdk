@@ -10,27 +10,26 @@ This Python software development kit (SDK) provides tools and resources for deve
 - [Configuration Methods](#configuration-methods)
 - [Usage](#usage)
 - [Sample App](#sample-app)
-- [SDK Development](#sdk_devel)
 - [About](#about)
 - [License](#license)
 - [Security](#security)
 - [Help and Support](#help)
 
 
-## Prerequisites <a name="prerequisites"></a>
+## Prerequisites<a id="prerequisites"></a>
 
 You'll need a sandbox account and sample access token to access data from the Blue Button 2.0 API.
 
 To learn how to create a sandbox account and generate a sample access token, see **[Try the API](https://bluebutton.cms.gov/developers/#try-the-api)**.
 
 
-## Installation <a name="installation"></a>
+## Installation<a id="installation"></a>
 
 ```bash
 pip install cms-bluebutton-sdk
 ```
 
-## Configuration Parameters<a name="configuration-parameters"></a>
+## Configuration Parameters<a id="configuration-parameters"></a>
 
 Required SDK configuration parameters include:
 
@@ -102,7 +101,7 @@ Example:
 
 ```
 
-## Configuration Methods<a name="configuration-methods"></a>
+## Configuration Methods<a id="configuration-methods"></a>
 There are three ways to configure the SDK when instantiating a `BlueButton` class instance.
 
 ### Python Dictionary
@@ -164,7 +163,7 @@ There are three ways to configure the SDK when instantiating a `BlueButton` clas
       version: 2
       ```
 
-## Sample Usage: Obtain Access Grant, Probe Scope, and Access Data <a name="usages"></a>
+## Sample Usage: Obtain Access Grant, Probe Scope, and Access Data<a id="usage"></a>
 
 Below are code snippets showing the SDK used with Python server and Flask.
 
@@ -284,24 +283,24 @@ if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=3001)
 ```
 
-## Sample App <a name="samples"></a>
+## Sample App<a id="sample-app"></a>
 
 For a complete Python React sample app, see [CMS Blue Button Python Sample App](https://github.com/CMSgov/bluebutton-sample-client-python-react).
 
 
-## About the Blue Button 2.0 API <a name="about"></a>
+## About the Blue Button 2.0 API<a id="about"></a>
 
 The [Blue Button 2.0 API](https://bluebutton.cms.gov/) provides Medicare enrollee claims data to applications using the [OAuth2.0 authorization flow](https://datatracker.ietf.org/doc/html/rfc6749). We aim to provide a developer-friendly, standards-based API that enables people with Medicare to connect their claims data to the applications, services, and research programs they trust.
 
-## License<a name="license"></a>
+## License<a id="license"></a>
 The CMS Blue Button 2.0 Python SDK is licensed under the Creative Commons Zero v1.0 Universal. For more details, see [License](https://github.com/CMSgov/cms-bb2-python-sdk/blob/main/LICENSE).
 
-## Security<a name="Security"></a>
+## Security<a id="security"></a>
 We do our best to keep our SDKs up to date with vulnerability patching and security testing, but you are responsible for your own review and testing before implementation.
 
 To report vulnerabilities, please see the [CMS Vulnerability Disclosure Policy](https://www.cms.gov/vulnerability-disclosure-policy) and follow the directions for reporting. 
 
 
-## Help and Support <a name="help"></a>
+## Help and Support<a id="help"></a>
 
 Got questions? Need help troubleshooting? Want to propose a new feature? Contact the Blue Button 2.0 team and connect with the community in our [Google Group](https://groups.google.com/forum/#!forum/Developer-group-for-cms-blue-button-api).
