@@ -309,9 +309,9 @@ Before building and publishing a new version, the version number needs to be inc
 
 NOTE: Once a file is uploaded, it can not be replaced with a new file. A new version is needed per:  https://test.pypi.org/help/#file-name-reuse
 
-To do this, edit the following line in the `setup.py` file with the desired release version:
+To do this, edit the following line in the `./cms_bluebutton/version.py` file with the desired release version, e.g. the SDK version to be released is 1.0.0:
 
 ```
-    version="1.0.0",
+__version__ = "1.0.0",
 ```
 

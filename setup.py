@@ -1,12 +1,16 @@
 import setuptools
 
 
+version = {}
+with open("./cms_bluebutton/version.py") as fp:
+    exec(fp.read(), version)
+
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
     name="cms-bluebutton-sdk",
-    version="1.0.1",
+    version=version['__version__'],
     author="CMS Blue Button 2.0 Team",
     author_email="BlueButtonAPI@cms.hhs.gov",
     license="CC0 1.0 Universal",
