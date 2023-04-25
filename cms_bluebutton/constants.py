@@ -1,8 +1,9 @@
-SDK_VERSION = "1.0.0"
+from .version import __version__ as sdk_version
+
 
 SDK_HEADERS = {
     "X-BLUEBUTTON-SDK": "python",
-    "X-BLUEBUTTON-SDK-VERSION": SDK_VERSION
+    "X-BLUEBUTTON-SDK-VERSION": sdk_version
 }
 
 REFRESH_TOKEN_ENDPOINT = "/o/token/"
