@@ -74,7 +74,7 @@ class BlueButton:
         else:
             raise ValueError(
                 "Error: Configuration environment must be set to"
-                "LOCAL or TEST or SANDBOX or PRODUCTION in: {}".format(config)
+                " LOCAL or TEST or SANDBOX or PRODUCTION in: {}".format(config)
             )
 
         # Check other settings are provided
