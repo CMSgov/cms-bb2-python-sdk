@@ -35,7 +35,7 @@ Required SDK configuration parameters include:
 
 | Parameter     | Value                           | Default |Description                                |
 | ------------- | ------------------------------- |----| --------------------------------------- |
-| `environment` | `SANDBOX` or `PRODUCTION` or `TEST` or `LOCAL`|`SANDBOX` | Blue Button 2.0 API environment |
+| `environment` | `SANDBOX` or `PRODUCTION`     |`SANDBOX` | Blue Button 2.0 API environment |
 | `version`       | `1` or `2`                        | `2`  | Blue Button 2.0 version            |
 | `client_id`    | *`your_client_id`*                          | |OAuth2.0 client ID of your app             |
 | `client_secret` | *`your_client_secret`*                           | |OAuth2.0 client secret of your app         |
@@ -69,8 +69,6 @@ The Blue Button 2.0 API is available in V1 and V2 in a sandbox and production en
 
 - Sandbox location: https://sandbox.bluebutton.cms.gov
 - Production location: https://api.bluebutton.cms.gov
-- Test location: https://test.bluebutton.cms.gov (for development testing with internal test server) 
-- Local location: http://localhost:8000 (for development testing with a local BB2 server)
 
 Version data formats:
 
@@ -122,7 +120,7 @@ There are three ways to configure the SDK when instantiating a `BlueButton` clas
                    "backoff_factor": 5,
                    "status_forcelist": [500, 502, 503, 504]
                }
-            }
+            })
       ```
 ### JSON config file
     - This is using a configuration file that is in a JSON format.
