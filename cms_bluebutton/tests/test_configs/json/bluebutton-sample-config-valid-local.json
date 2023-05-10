@@ -1,0 +1,7 @@
+{
+    "environment": "LOCAL",
+    "client_id": "<your BB2 client_id here>",
+    "client_secret": "<your BB2 client_secret here>",
+    "callback_url": "https://fake-local/your/callback/here",
+    "version": 1
+}

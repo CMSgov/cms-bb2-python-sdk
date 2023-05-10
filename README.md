@@ -120,7 +120,7 @@ There are three ways to configure the SDK when instantiating a `BlueButton` clas
                    "backoff_factor": 5,
                    "status_forcelist": [500, 502, 503, 504]
                }
-            }
+            })
       ```
 ### JSON config file
     - This is using a configuration file that is in a JSON format.

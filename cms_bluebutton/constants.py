@@ -9,6 +9,8 @@ SDK_HEADERS = {
 REFRESH_TOKEN_ENDPOINT = "/o/token/"
 
 ENVIRONMENT_URLS = {
+    "LOCAL": "http://localhost:8000",
+    "TEST": "https://test.bluebutton.cms.gov",
     "SANDBOX": "https://sandbox.bluebutton.cms.gov",
     "PRODUCTION": "https://api.bluebutton.cms.gov",
 }
