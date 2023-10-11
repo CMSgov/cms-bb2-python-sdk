@@ -6,3 +6,4 @@ urllib3==1.26.8
 coverage==6.3.2
 pytest==7.0.1
 flake8==4.0.1
+certifi==2023.7.22
