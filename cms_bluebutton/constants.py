@@ -21,4 +21,7 @@ FHIR_RESOURCE_TYPE = {
     "Coverage": "fhir/Coverage/",
     "Profile": "connect/userinfo",
     "ExplanationOfBenefit": "fhir/ExplanationOfBenefit/",
+    "C4dicCoverage": "fhir/InsuranceCover/",
+    "C4dicPatient": "fhir/InsurancePat/",
+    "C4dicOrganization": "fhir/InsuranceOrg/"
 }
