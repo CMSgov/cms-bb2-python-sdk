@@ -113,6 +113,18 @@ class BlueButton:
         config["url"] = FHIR_RESOURCE_TYPE["ExplanationOfBenefit"]
         return fhir_request(self, config)
 
+    def get_c4dic_coverage_data(self, config):
+        config["url"] = FHIR_RESOURCE_TYPE["C4dicCoverage"]
+        return fhir_request(self, config)
+
+    def get_c4dic_patient_data(self, config):
+        config["url"] = FHIR_RESOURCE_TYPE["C4dicPatient"]
+        return fhir_request(self, config)
+
+    def get_c4dic_organization_data(self, config):
+        config["url"] = FHIR_RESOURCE_TYPE["C4dicOrganization"]
+        return fhir_request(self, config)
+
     def get_profile_data(self, config):
         config["url"] = FHIR_RESOURCE_TYPE["Profile"]
         return fhir_request(self, config)
