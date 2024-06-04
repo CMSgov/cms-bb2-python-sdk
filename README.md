@@ -45,6 +45,9 @@ Required SDK configuration parameters include:
 ### Access Token Refresh on Expire
 SDK FHIR requests check whether the access token is expired before the data endpoint call. By default, an expired token will refresh. To disable token refresh, set `token_refresh_on_expire` to `false`.
 
+### Expired Data Access Grant
+In order to handle expired data access grant refer to section [Expired Data Access Grant](https://bluebutton.cms.gov/developers/#expired-data-access-grant)
+
 ### FHIR Requests Retry Settings
 
 Retry is enabled by default for FHIR requests. The folllowing parameters are available for the exponential back off retry algorithm.
