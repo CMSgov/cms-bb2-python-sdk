@@ -229,13 +229,15 @@ def authorization_callback():
        "patient/ExplanationOfBenefit.read",
        "patient/Patient.read",
        "profile",
+       "openid",
     ]
     
-    2. access token scope where demagraphic info not included:
+    2. access token scope where demographic info not included:
     
     scope: [
         "patient/Coverage.read",
         "patient/ExplanationOfBenefit.read",
+        "openid",
     ]
     """
     config = {
