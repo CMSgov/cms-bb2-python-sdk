@@ -218,26 +218,39 @@ def authorization_callback():
     scopes = auth_token.scope
 
     # iterate scope entries here or check if a permission is in the scope
-    if "patient/Patient.read" in scopes: 
-        # patient info access granted
+    if "patient/Patient.r" in scopes: 
+        # patient read access granted, similarly can check:
+        # "patient/Patient.s", or "patient/Patient.rs"
 
     """
     1. access token scope where demographic info included:
     
     scope: [
-       "patient/Coverage.read",
-       "patient/ExplanationOfBenefit.read",
-       "patient/Patient.read",
-       "profile",
-       "openid",
+        "profile",
+        "openid",
+        "patient/Patient.r",
+        "patient/Patient.s",
+        "patient/Patient.rs",
+        "patient/ExplanationOfBenefit.r",
+        "patient/ExplanationOfBenefit.s",
+        "patient/ExplanationOfBenefit.rs",
+        "patient/Coverage.r",
+        "patient/Coverage.s",
+        "patient/Coverage.rs",
+        "launch/patient",
     ]
     
     2. access token scope where demographic info not included:
     
     scope: [
-        "patient/Coverage.read",
-        "patient/ExplanationOfBenefit.read",
         "openid",
+        "patient/ExplanationOfBenefit.r",
+        "patient/ExplanationOfBenefit.s",
+        "patient/ExplanationOfBenefit.rs",
+        "patient/Coverage.r",
+        "patient/Coverage.s",
+        "patient/Coverage.rs",
+        "launch/patient",
     ]
     """
     config = {
