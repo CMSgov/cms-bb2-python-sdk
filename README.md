@@ -167,7 +167,12 @@ There are three ways to configure the SDK when instantiating a `BlueButton` clas
 
 ## Sample Usage: Obtain Access Grant, Probe Scope, and Access Data<a id="usage"></a>
 
-Below are code snippets showing the SDK used with Python server and Flask.
+Below are code snippets showing the SDK used with Python server and Flask. This code walks through:
+
+- Obtaining an access token with scope ([SMART App Launch: Scopes](https://build.fhir.org/ig/HL7/smart-app-launch/scopes-and-launch-context.html#scopes-for-requesting-fhir-resources)) chosen by a user
+- Passing the token to query for FHIR data
+- Using URL links from the response to page through data
+- Using the SDK paging support to return all data in one call
 
 ```python
 from flask import Flask
