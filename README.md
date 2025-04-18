@@ -223,7 +223,7 @@ def authorization_callback():
     scopes = auth_token.scope
 
     # iterate scope entries here or check if a permission is in the scope
-    if "patient/Patient.r" in scopes: 
+    if "patient/Patient.r" in scopes or "patient/Patient.rs" in scopes: 
         # patient read access granted, similarly can check:
         # "patient/Patient.s", or "patient/Patient.rs"
 
