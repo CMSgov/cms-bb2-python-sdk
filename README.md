@@ -245,7 +245,7 @@ def authorization_callback():
         "launch/patient",
     ]
     
-    2. access token scope where demographic info not included:
+    2. access token scope where demographic info (profile patient/Patient.r patient/Patient.s patient/Patient.rs) not included:
     
     scope: [
         "openid",
