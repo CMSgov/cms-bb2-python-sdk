@@ -32,13 +32,13 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     python_requires=">=3.6",
     install_requires=[
-        "requests >= 2.0",
+        "requests >= 2.32.0",
         "requests-toolbelt >= 0.9.1",
-        "pyyaml >= 5.0",
+        "pyyaml >= 5.4.1",
     ],
     extras_require={
         "dev": [
-            "pytest >= 6.0",
+            "pytest >= 7.0.1",
             "requests-mock >= 1.9.3",
         ],
     },
