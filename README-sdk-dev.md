@@ -47,7 +47,7 @@ To install with the tools you need to develop and run tests do the following:
 From the repository base directory:
 
 ```
-pip install -e .[dev]
+pip install -e '.[dev]'
 ```
 
 ### Running tests
