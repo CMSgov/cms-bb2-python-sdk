@@ -10,7 +10,7 @@ authors = [
 description = "An SDK used for interacting with the CMS Blue Button 2.0 API"
 requires-python = ">=3.9"
 readme = "README.md"
-version = "1.0.4"
+dynamic = ["version"]
 license = "CC0-1.0"
 classifiers=[
     "Programming Language :: Python :: 3",
