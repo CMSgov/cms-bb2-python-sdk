@@ -47,5 +47,5 @@ dev = [
 py-modules = ["cms_bluebutton"]
 
 [tool.setuptools.packages.find]
-include = ["cms_bluebutton*"]
+include = ["cms_bluebutton"]
 exclude = ["cms_bluebutton.tests.*"]
