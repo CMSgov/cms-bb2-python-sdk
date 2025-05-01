@@ -35,7 +35,7 @@ It is intended for BB2 team members or others performing SDK development work.
   pip install --upgrade pip
 
   # Update tools
-  python3 -m pip install --upgrade pip setuptools wheel twine
+  python3 -m pip install --upgrade pip setuptools wheel twine build
   ```
 
 ## Developing the Blue Button 2.0 SDK (for BB2 team SDK developers)
@@ -47,7 +47,7 @@ To install with the tools you need to develop and run tests do the following:
 From the repository base directory:
 
 ```
-pip install -e .[dev]
+pip install -e '.[dev]'
 ```
 
 ### Running tests
@@ -88,7 +88,7 @@ To build the cms_bluebutton package do the following:
   ```
   # From repository root directory:
   rm -rf build/
-  python setup.py bdist_wheel
+  python -m build --wheel
   ```
 
 The resulting distribution files with be created in the `dist/` directory.
