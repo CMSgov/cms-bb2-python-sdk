@@ -11,10 +11,6 @@ cms-bb2-python-sdk is supported by a dedicated team of individuals fulfilling va
 | Maintainer | Brandon Wang | ICF |
 | Maintainer | Connor Lewellyn | Nava PBC |
 
-See [CODEOWNERS.md](.github/CODEOWNERS.md) for a list of those responsible for the code and documentation in this repository.
-
-See [Community Guidelines](#cms-bb2-python-sdk-open-source-community-guidelines) on principles and guidelines for participating in this open source project.
-
 ## Roles & Responsibilities
 
 The members of cms-bb2-python-sdk community are responsible for guiding its development, ensuring quality standards, and fostering a collaborative environment. They play a vital role in making decisions about code contributions, handling releases, and ensuring the project meets its goals and objectives. Below is a list of the key members and their specific roles and responsibilities. We are eagerly seeking individuals who are interested in joining the community and helping shape and support these roles.
