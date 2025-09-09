@@ -1,0 +1,79 @@
+{
+  "name": "cms-bb2-python-sdk",
+  "description": "Python SDK for wworking with BlueButton API",
+  "longDescription": "This Python software development kit (SDK) provides tools and resources for developers integrating with the CMS Blue Button 2.0 (BB2.0) API.",
+  "status": "production",
+  "permissions": {
+    "licenses": [
+      {
+        "URL": "LICENSE",
+        "name": "CC0-1.0"
+      }
+    ],
+    "usageType": "openSource"
+  },
+  "organization": "Centers for Medicare & Medicaid Services",
+  "repositoryURL": "https://github.com/CMS/cms-bb2-python-sdk",
+  "repositoryHost": "github.com/CMSgov",
+  "repositoryVisibility": "public",
+  "vcs": "git",
+  "laborHours": null,
+  "reuseFrequency": {
+    "forks": 0
+  },
+  "platforms": [
+    "windows",
+    "mac",
+    "linux",
+    "web"
+  ],
+  "categories": [
+    "it-development",
+    "application-development"
+  ],
+  "softwareType": "library",
+  "languages": [
+    "python"
+  ],
+  "maintenance": "internal",
+  "contractNumber": "0",
+  "date": {
+    "created": "2022-02-01T16:01:23-05:00",
+    "lastModified": "2025-09-09T13:47:11+0000",
+    "metadataLastUpdated": "2025-09-09T13:47:11+0000"
+  },
+  "tags": [
+    "python",
+    "sdk",
+    "bluebutton"
+  ],
+  "contact": {
+    "email": "jimmyfagan@navapbc.com",
+    "name": "Jimmy Fagan"
+  },
+  "feedbackMechanisms": [
+    "https://github.com/CMS/cms-bb2-python-sdk/issues"
+  ],
+  "localisation": "true",
+  "repositoryType": "Libraries",
+  "userInput": "No",
+  "fismaLevel": "Low",
+  "group": "CMS/OEDA/DASG",
+  "projects": [
+    "BlueButton"
+  ],
+  "systems": [
+    "BlueButton"
+  ],
+  "upstream": [
+    "https://github.com/CMSgov/cms-bb2-python-sdk/network/dependencies"
+  ],
+  "subsetInHealthcare": [
+    "Operational",
+    "Medicare"
+  ],
+  "userType": [
+    "Providers"
+  ],
+  "maturityModelTier": 3
+}
