@@ -95,7 +95,7 @@ def generate_pkce_data() -> dict:
     code_challenge = base64.urlsafe_b64encode(
         hashlib.sha256(verifier.encode("ASCII")).digest()
     )
-    return {"code_challenge": code_challenge.decode("utf-8"), "verifier": verifier}
+    return {"code_challenge": code_challenge.decode("utf-8"), "code_challenge_method": "S256", "verifier": verifier}
 
 
 def generate_random_state(num) -> str:
@@ -108,7 +108,7 @@ def generate_auth_data() -> dict:
     return auth_data
 
 
-def get_access_token_from_code(bb, auth_data, callback_code) -> dict:
+def get_access_token_from_code(bb, auth_data, callback_code, callback_state) -> dict:
     data = {
         "client_id": bb.client_id,
         "client_secret": bb.client_secret,
@@ -117,10 +117,20 @@ def get_access_token_from_code(bb, auth_data, callback_code) -> dict:
         "redirect_uri": bb.callback_url,
         "code_verifier": auth_data["verifier"],
         "code_challenge": auth_data["code_challenge"],
+        "code_challenge_method": "S256",
+        "state": callback_state,
     }
 
     token_response = _do_post(data, bb, None)
-    token_response.raise_for_status()
+    try:
+        token_response.raise_for_status()
+    except requests.exceptions.HTTPError as e:
+        print(f'Error obtaining access token: {e}')
+        print(f'Response content: {token_response.text}')
+        print(f'Request data: {data}')
+        print(f'Request headers: {SDK_HEADERS}')
+        print(f'Request URL: {bb.auth_token_url}')
+        raise
     token_dict = token_response.json()
     token_dict["expires_at"] = datetime.datetime.now(
         datetime.timezone.utc
@@ -139,17 +149,22 @@ def get_authorization_token(bb, auth_data, callback_code, callback_state):
     if callback_state != auth_data["state"]:
         raise ValueError("Provided callback state does not match.")
 
-    return AuthorizationToken(get_access_token_from_code(bb, auth_data, callback_code))
+    return AuthorizationToken(get_access_token_from_code(bb, auth_data, callback_code, callback_state))
 
 
 def _do_post(data, bb, auth):
     mp_encoder = MultipartEncoder(data)
     headers = SDK_HEADERS
     headers["content-type"] = mp_encoder.content_type
+    print(f'headers: {headers}')
+    print(f'url: {bb.auth_token_url}')
+    print(f'data: {data}')
+    print(f'auth: {auth}')
+
     return requests.post(
         url=bb.auth_token_url,
         data=mp_encoder,
-        headers=headers
+        headers=headers,
     ) if not auth else requests.post(
         url=bb.auth_token_url,
         data=mp_encoder,

@@ -1,7 +1,7 @@
 {
     "environment": "SANDBOX",
-    "client_id": "<your BB2 client_id here>",
-    "client_secret": "<your BB2 client_secret here.>",
-    "callback_url": "https://www.fake.com/your/callback/here",
-    "version": 2
+    "client_id": "Lb0hAgLi7rtyZvJMucZDDj0i0IKQWqiQrWSVZCZ7",
+    "client_secret": "JsLVxfaugDqUgowsXNXgoHRroWakt9QFFzYVhaK7Db0aN6DegK9Kn4a56awCOLWkxGiq6dRqgSLX4jAzBFxZNk3XJFERUTHbH1TMvpEsNtP76nrF9ZdkyB3PZT9GFaxr",
+    "callback_url": "http://localhost:3001/api/bluebutton/callback/",
+    "version": 3
 }
