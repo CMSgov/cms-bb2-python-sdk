@@ -116,9 +116,6 @@ def get_access_token_from_code(bb, auth_data, callback_code, callback_state) -> 
         "grant_type": "authorization_code",
         "redirect_uri": bb.callback_url,
         "code_verifier": auth_data["verifier"],
-        "code_challenge": auth_data["code_challenge"],
-        "code_challenge_method": "S256",
-        "state": callback_state,
     }
 
     token_response = _do_post(data, bb, None)
