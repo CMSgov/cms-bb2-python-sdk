@@ -5,6 +5,7 @@ import random
 import string
 import datetime
 import urllib
+from cms_bluebutton.tests.fixtures import token_response
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 
 from .constants import SDK_HEADERS
@@ -119,15 +120,7 @@ def get_access_token_from_code(bb, auth_data, callback_code, callback_state) -> 
     }
 
     token_response = _do_post(data, bb, None)
-    try:
-        token_response.raise_for_status()
-    except requests.exceptions.HTTPError as e:
-        print(f'Error obtaining access token: {e}')
-        print(f'Response content: {token_response.text}')
-        print(f'Request data: {data}')
-        print(f'Request headers: {SDK_HEADERS}')
-        print(f'Request URL: {bb.auth_token_url}')
-        raise
+    token_response.raise_for_status()
     token_dict = token_response.json()
     token_dict["expires_at"] = datetime.datetime.now(
         datetime.timezone.utc
@@ -153,10 +146,6 @@ def _do_post(data, bb, auth):
     mp_encoder = MultipartEncoder(data)
     headers = SDK_HEADERS
     headers["content-type"] = mp_encoder.content_type
-    print(f'headers: {headers}')
-    print(f'url: {bb.auth_token_url}')
-    print(f'data: {data}')
-    print(f'auth: {auth}')
 
     return requests.post(
         url=bb.auth_token_url,

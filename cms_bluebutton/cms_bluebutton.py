@@ -18,10 +18,7 @@ from .fhir_request import fhir_request
 
 
 ROOT_DIR = os.path.abspath(os.curdir) + "/"
-print("ROOT_DIR:", ROOT_DIR)
 DEFAULT_CONFIG_FILE_LOCATION = ROOT_DIR + "./.bluebutton-config.json"
-print("DEFAULT_CONFIG_FILE_LOCATION:", DEFAULT_CONFIG_FILE_LOCATION)
-
 
 class BlueButton:
 
@@ -156,8 +153,4 @@ class BlueButton:
         return generate_authorize_url(self, auth_data)
 
     def get_authorization_token(self, auth_data, callback_code, callback_state):
-        print("Getting authorization token...")
-        print("Auth Data:", auth_data)
-        print("Callback Code:", callback_code)
-        print("Callback State:", callback_state)
         return get_authorization_token(self, auth_data, callback_code, callback_state)
