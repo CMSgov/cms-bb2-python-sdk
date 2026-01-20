@@ -109,7 +109,7 @@ def generate_auth_data() -> dict:
     return auth_data
 
 
-def get_access_token_from_code(bb, auth_data, callback_code, callback_state) -> dict:
+def get_access_token_from_code(bb, auth_data, callback_code) -> dict:
     data = {
         "client_id": bb.client_id,
         "client_secret": bb.client_secret,
@@ -139,7 +139,7 @@ def get_authorization_token(bb, auth_data, callback_code, callback_state):
     if callback_state != auth_data["state"]:
         raise ValueError("Provided callback state does not match.")
 
-    return AuthorizationToken(get_access_token_from_code(bb, auth_data, callback_code, callback_state))
+    return AuthorizationToken(get_access_token_from_code(bb, auth_data, callback_code))
 
 
 def _do_post(data, bb, auth):
