@@ -5,7 +5,6 @@ import random
 import string
 import datetime
 import urllib
-from cms_bluebutton.tests.fixtures import token_response
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 
 from .constants import SDK_HEADERS
