@@ -169,3 +169,6 @@ bb2_venv/
 # BB2 ignores
 .bluebutton-config.json
 .bluebutton-config.yaml
+
+# Snyk Security Extension - AI Rules (auto-generated)
+.github/instructions/snyk_rules.instructions.md

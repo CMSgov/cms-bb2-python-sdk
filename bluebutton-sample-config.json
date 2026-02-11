@@ -3,5 +3,5 @@
     "client_id": "<your BB2 client_id here>",
     "client_secret": "<your BB2 client_secret here.>",
     "callback_url": "https://www.fake.com/your/callback/here",
-    "version": 2
+    "version": 3
 }

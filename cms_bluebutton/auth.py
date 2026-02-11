@@ -95,7 +95,7 @@ def generate_pkce_data() -> dict:
     code_challenge = base64.urlsafe_b64encode(
         hashlib.sha256(verifier.encode("ASCII")).digest()
     )
-    return {"code_challenge": code_challenge.decode("utf-8"), "verifier": verifier}
+    return {"code_challenge": code_challenge.decode("utf-8"), "code_challenge_method": "S256", "verifier": verifier}
 
 
 def generate_random_state(num) -> str:
@@ -116,7 +116,6 @@ def get_access_token_from_code(bb, auth_data, callback_code) -> dict:
         "grant_type": "authorization_code",
         "redirect_uri": bb.callback_url,
         "code_verifier": auth_data["verifier"],
-        "code_challenge": auth_data["code_challenge"],
     }
 
     token_response = _do_post(data, bb, None)
@@ -146,10 +145,11 @@ def _do_post(data, bb, auth):
     mp_encoder = MultipartEncoder(data)
     headers = SDK_HEADERS
     headers["content-type"] = mp_encoder.content_type
+
     return requests.post(
         url=bb.auth_token_url,
         data=mp_encoder,
-        headers=headers
+        headers=headers,
     ) if not auth else requests.post(
         url=bb.auth_token_url,
         data=mp_encoder,

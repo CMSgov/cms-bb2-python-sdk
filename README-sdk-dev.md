@@ -315,3 +315,50 @@ To do this, edit the following line in the `./cms_bluebutton/version.py` file wi
 __version__ = "1.0.0",
 ```
 
+### Testing Locally
+
+The current method for seeing the SDK in action is fairly complex, as it requires also setting up the Python sample client (https://github.com/CMSgov/bluebutton-sample-client-python-react/tree/main). These both, of course, depend upon the web-server repo for most of their logic. It is possible that in order to fully understand an issue that arises within the SDK or the sample client, a developer would have to track changes across 3 separate projects. There should be some future work to simplify this process as it is very manual and laborious.
+
+The steps listed here are listed elsewhere in the documentation but for the sake of convenience, they are partially repeated here
+and written together so that a developer should be able to follow this step by step.
+
+The overall goals are to:
+
+  - Build a local version of the SDK
+  - Run a local version of sample client that consumes a local version of the SDK
+
+  ### Building a local version of the SDK
+
+    Run the following commands in the base of this SDK repository. The commands suppose that you have the Python sample client cloned in the same folder as this SDK repo. Do not be in a virtualenv while running these commands.
+
+    ```
+      rm -rf build/
+      python -m build --wheel --o ../bluebutton-sample-client-python-react/server
+    ```
+
+    The --o (or outdir) command should effectively 'copy paste' the built version of the .whl file into where it would be needed for the sample client. If you do not want it in the sample client, omit the --o and file path.
+
+  ### Run a local version of sample client that consumes a local version of the SDK
+
+    Ensure that in bluebutton-sample-client-python-react/server/Dockerfile, uncomment the following line. Replace the version number (1.0.4 in the example) of the .whl file with what has been generated from the previous build command.
+
+    ```
+      RUN pip install cms_bluebutton_sdk-1.0.4-py3-none-any.whl
+    ```
+    
+    In bluebutton-sample-client-python-react/server/Pipfile, add this line:
+
+    ```
+      cms-bluebutton-sdk = {file = "./cms_bluebutton_sdk-1.0.4-py3-none-any.whl"}
+    ```
+
+    In the base repository of bluebutton-sample-client-python-react, run the following commands. Ensure that you have no currently running containers or images of the sample client.
+
+    ```
+      cd server
+      unzip -l cms_bluebutton_sdk-1.0.4-py3-none-any.whl
+      pip install cms_bluebutton_sdk-1.0.4-py3-none-any.whl
+      docker compose up
+    ```
+
+  Each time a change is made in the SDK, you must repeat all of the previous steps of building and re-running a local sample client. You must also ensure that the containers and images are removed each time.

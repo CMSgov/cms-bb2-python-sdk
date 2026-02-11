@@ -20,7 +20,6 @@ from .fhir_request import fhir_request
 ROOT_DIR = os.path.abspath(os.curdir) + "/"
 DEFAULT_CONFIG_FILE_LOCATION = ROOT_DIR + "./.bluebutton-config.json"
 
-
 class BlueButton:
 
     def __init__(self, config=DEFAULT_CONFIG_FILE_LOCATION):
