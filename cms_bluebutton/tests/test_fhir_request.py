@@ -287,3 +287,26 @@ class TestAPI(unittest.TestCase):
         self.assertIsNotNone(response["auth_token"])
         self.assertEqual(response["response"].status_code, 404)
         self.assertEqual(get_request_mock.call_count, 1)
+
+    def test_extract_next_page_url_link_less_searchset(self):
+        # FHIR Bundle.link is optional (cardinality 0..*), so a valid
+        # searchset Bundle can arrive without a "link" array, for example an
+        # empty result or the last page of a set. That should report no next
+        # page rather than raising.
+        bb = BlueButton(config=MOCK_BB_CONFIG)
+        bundle = {
+            "resourceType": "Bundle",
+            "type": "searchset",
+            "total": 0,
+            "entry": [],
+        }
+        self.assertIsNone(bb.extract_next_page_url(bundle))
+
+    def test_get_pages_stops_on_link_less_searchset(self):
+        # get_pages walks "next" links; a link-less final page must terminate
+        # the walk cleanly instead of crashing the caller.
+        bb = BlueButton(config=MOCK_BB_CONFIG)
+        config = generate_mock_config()
+        bundle = {"resourceType": "Bundle", "type": "searchset", "entry": []}
+        result = bb.get_pages(bundle, config)
+        self.assertEqual(len(result["pages"]), 1)
