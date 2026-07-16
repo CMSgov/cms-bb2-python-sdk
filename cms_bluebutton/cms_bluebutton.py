@@ -117,7 +117,7 @@ class BlueButton:
         return fhir_request(self, config)
 
     def extract_page_nav_url(self, data, relation):
-        if data and data['resourceType'] == "Bundle" and data['type'] == "searchset" and data['link']:
+        if data and data.get('resourceType') == "Bundle" and data.get('type') == "searchset" and data.get('link'):
             for lnk in data['link']:
                 if lnk['relation'] == relation:
                     return lnk['url']
