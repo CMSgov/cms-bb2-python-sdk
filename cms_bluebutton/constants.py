@@ -1,10 +1,6 @@
 from .version import __version__ as sdk_version
 
-
-SDK_HEADERS = {
-    "X-BLUEBUTTON-SDK": "python",
-    "X-BLUEBUTTON-SDK-VERSION": sdk_version
-}
+SDK_HEADERS = {"X-BLUEBUTTON-SDK": "python", "X-BLUEBUTTON-SDK-VERSION": sdk_version}
 
 REFRESH_TOKEN_ENDPOINT = "/o/token/"
 
@@ -21,4 +17,5 @@ FHIR_RESOURCE_TYPE = {
     "Coverage": "fhir/Coverage/",
     "Profile": "connect/userinfo",
     "ExplanationOfBenefit": "fhir/ExplanationOfBenefit/",
+    "InsuranceCard": "fhir/Patient/$generate-insurance-card",
 }

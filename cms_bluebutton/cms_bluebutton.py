@@ -2,9 +2,11 @@
 Blue Button 2.0 SDK Class
 
 """
+
 import json
 import os
 import pathlib
+
 import yaml
 
 from .auth import (
@@ -16,12 +18,11 @@ from .auth import (
 from .constants import ENVIRONMENT_URLS, FHIR_RESOURCE_TYPE
 from .fhir_request import fhir_request
 
-
 ROOT_DIR = os.path.abspath(os.curdir) + "/"
 DEFAULT_CONFIG_FILE_LOCATION = ROOT_DIR + "./.bluebutton-config.json"
 
-class BlueButton:
 
+class BlueButton:
     def __init__(self, config=DEFAULT_CONFIG_FILE_LOCATION):
         self.client_id = None
         self.client_secret = None
@@ -29,9 +30,11 @@ class BlueButton:
         self.version = 2  # Default to BB2 version 2
         self.token_refresh_on_expire = True
         # initilized with default
-        self.retry_config = {"total": 3,
-                             "backoff_factor": 5,
-                             "status_forcelist": [500, 502, 503, 504]}
+        self.retry_config = {
+            "total": 3,
+            "backoff_factor": 5,
+            "status_forcelist": [500, 502, 503, 504],
+        }
 
         self.base_url = None
 
@@ -98,7 +101,9 @@ class BlueButton:
             # override default with normalization
             self.retry_config["total"] = retrycfg.get("total", 3)
             self.retry_config["backoff_factor"] = retrycfg.get("backoff_factor", 5)
-            self.retry_config["status_forcelist"] = retrycfg.get("status_forcelist", [500, 502, 503, 504])
+            self.retry_config["status_forcelist"] = retrycfg.get(
+                "status_forcelist", [500, 502, 503, 504]
+            )
 
     def get_patient_data(self, config):
         config["url"] = FHIR_RESOURCE_TYPE["Patient"]
@@ -116,15 +121,25 @@ class BlueButton:
         config["url"] = FHIR_RESOURCE_TYPE["Profile"]
         return fhir_request(self, config)
 
+    def get_insurance_card_data(self, config):
+        # v3-only endpoint: CARIN Digital Insurance Card (C4DIC) FHIR Bundle
+        config["url"] = FHIR_RESOURCE_TYPE["InsuranceCard"]
+        return fhir_request(self, config)
+
     def extract_page_nav_url(self, data, relation):
-        if data and data['resourceType'] == "Bundle" and data['type'] == "searchset" and data['link']:
-            for lnk in data['link']:
-                if lnk['relation'] == relation:
-                    return lnk['url']
+        if (
+            data
+            and data["resourceType"] == "Bundle"
+            and data["type"] == "searchset"
+            and data["link"]
+        ):
+            for lnk in data["link"]:
+                if lnk["relation"] == relation:
+                    return lnk["url"]
         return None
 
     def extract_next_page_url(self, data):
-        return self.extract_page_nav_url(data, 'next')
+        return self.extract_page_nav_url(data, "next")
 
     def get_pages(self, data, config):
         bundle = data
@@ -134,7 +149,7 @@ class BlueButton:
         while page_url:
             config["url"] = page_url
             next_page = fhir_request(self, config)
-            bundle = next_page['response'].json()
+            bundle = next_page["response"].json()
             auth_token = next_page["auth_token"]
             pages.append(bundle)
             page_url = self.extract_next_page_url(bundle)

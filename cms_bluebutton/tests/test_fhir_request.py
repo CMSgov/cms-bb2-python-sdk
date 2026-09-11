@@ -1,12 +1,11 @@
-import json
 import datetime
+import json
 import unittest
 from os.path import abspath, curdir
 from unittest import mock
-from urllib.parse import urlparse, parse_qs
+from urllib.parse import parse_qs, urlparse
 
 from cms_bluebutton import AuthorizationToken, BlueButton
-
 
 MOCK_BB_CONFIG = {
     "environment": "SANDBOX",
@@ -57,12 +56,15 @@ class MockSessionSearchPage:
         return
 
     def get(self, *args, **kwargs):
-        eob_url = kwargs['url']
+        eob_url = kwargs["url"]
         parsed_url = urlparse(eob_url)
         qps = parse_qs(parsed_url.query)
-        if 'startIndex' in qps:
+        if "startIndex" in qps:
             pg_idx = int(qps["startIndex"][0]) // 10
-            with open(abspath(curdir) + "/tests/fixtures/eobs/eob_p{}.json".format(pg_idx), "r") as f:
+            with open(
+                abspath(curdir) + "/tests/fixtures/eobs/eob_p{}.json".format(pg_idx),
+                "r",
+            ) as f:
                 return MockResponse(json.load(f), 200)
         else:
             # first page (bundle of eobs)
@@ -78,9 +80,9 @@ class MockSessionTokenRefresh:
         return
 
     def get(self, *args, **kwargs):
-        endpoint_url = kwargs['url']
+        endpoint_url = kwargs["url"]
         parsed_url = urlparse(endpoint_url)
-        if parsed_url.path.endswith('Patient/'):
+        if parsed_url.path.endswith("Patient/"):
             # patient
             return self.response
         else:
@@ -92,21 +94,31 @@ def success_fhir_patient_request_mock(*args, **kwargs):
 
 
 def mocked_token_refresh_post(*args, **kwargs):
-    endpoint_url = kwargs['url']
+    endpoint_url = kwargs["url"]
     parsed_url = urlparse(endpoint_url)
-    if parsed_url.path.endswith('token/'):
+    if parsed_url.path.endswith("token/"):
         # auth token - refreshed
-        expires_at_str = str(datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(seconds=36000))
-        return MockResponseWithRaiseForStatus({"access_token": "fake_access_token",
-                                               "refresh_token": "fake_refresh_token",
-                                               "expires_at": expires_at_str,
-                                               "patient": "-20140000010000"}, 200)
+        expires_at_str = str(
+            datetime.datetime.now(datetime.timezone.utc)
+            + datetime.timedelta(seconds=36000)
+        )
+        return MockResponseWithRaiseForStatus(
+            {
+                "access_token": "fake_access_token",
+                "refresh_token": "fake_refresh_token",
+                "expires_at": expires_at_str,
+                "patient": "-20140000010000",
+            },
+            200,
+        )
     else:
         raise ValueError("Unexpected POST path={}".format(parsed_url.path))
 
 
 def success_fhir_patient_request_refresh_token_mock(*args, **kwargs):
-    return MockSessionTokenRefresh({"resourceType": "Patient", "id": "-20140000010000"}, 200)
+    return MockSessionTokenRefresh(
+        {"resourceType": "Patient", "id": "-20140000010000"}, 200
+    )
 
 
 def success_fhir_coverage_request_mock(*args, **kwargs):
@@ -123,6 +135,10 @@ def success_fhir_eob_pages_request_mock(*args, **kwargs):
 
 def success_fhir_profile_request_mock(*args, **kwargs):
     return MockSession({"sub": "-20140000010000", "patient": "-20140000010000"}, 200)
+
+
+def success_fhir_insurance_card_request_mock(*args, **kwargs):
+    return MockSession({"resourceType": "Bundle", "id": "ccc-333-333-333-cccc"}, 200)
 
 
 def error_fhir_request_mock(*args, **kwargs):
@@ -204,24 +220,28 @@ class TestAPI(unittest.TestCase):
         response = bb.get_explaination_of_benefit_data(config)
         self.assertIsNotNone(response["auth_token"])
         self.assertEqual(response["response"].status_code, 200)
-        self.assertEqual(response["response"].json()["id"], "85a22239-fb03-43b1-a8ba-952dcea76004")
+        self.assertEqual(
+            response["response"].json()["id"], "85a22239-fb03-43b1-a8ba-952dcea76004"
+        )
         self.assertEqual(response["response"].json()["resourceType"], "Bundle")
         self.assertEqual(get_request_mock.call_count, 1)
         # fetch all the pages given the 1st page
-        pages = bb.get_pages(response['response'].json(), config)
+        pages = bb.get_pages(response["response"].json(), config)
         self.assertIsNotNone(response["auth_token"])
         self.assertEqual(len(pages["pages"]), 6)
         self.assertEqual(get_request_mock.call_count, 6)
 
     @mock.patch("requests.post", side_effect=mocked_token_refresh_post)
-    @mock.patch("requests.Session", side_effect=success_fhir_patient_request_refresh_token_mock)
+    @mock.patch(
+        "requests.Session", side_effect=success_fhir_patient_request_refresh_token_mock
+    )
     def test_successful_fhir_request_token_refreshed(self, post_mock, get_mock):
         bb = BlueButton(config=MOCK_BB_CONFIG)
         config = generate_mock_config_w_expired_access_token()
         response = bb.get_patient_data(config)
-        self.assertTrue(config['auth_token'].access_token_expired())
+        self.assertTrue(config["auth_token"].access_token_expired())
         self.assertIsNotNone(response["auth_token"])
-        self.assertFalse(response['auth_token'].access_token_expired())
+        self.assertFalse(response["auth_token"].access_token_expired())
         self.assertEqual(response["response"].status_code, 200)
         self.assertEqual(response["response"].json()["id"], "-20140000010000")
         self.assertEqual(response["response"].json()["resourceType"], "Patient")
@@ -231,14 +251,18 @@ class TestAPI(unittest.TestCase):
         self.assertEqual(get_mock.call_count, 1)
 
     @mock.patch("requests.post", side_effect=mocked_token_refresh_post)
-    @mock.patch("requests.Session", side_effect=success_fhir_patient_request_refresh_token_mock)
+    @mock.patch(
+        "requests.Session", side_effect=success_fhir_patient_request_refresh_token_mock
+    )
     def test_successful_fhir_request_token_refresh_disabled(self, get_mock, post_mock):
-        bb = BlueButton(config="./tests/test_configs/json/bluebutton-sample-config-disable-token-refresh-on-expire.json")
+        bb = BlueButton(
+            config="./tests/test_configs/json/bluebutton-sample-config-disable-token-refresh-on-expire.json"
+        )
         config = generate_mock_config_w_expired_access_token()
         response = bb.get_patient_data(config)
-        self.assertTrue(config['auth_token'].access_token_expired())
+        self.assertTrue(config["auth_token"].access_token_expired())
         self.assertIsNotNone(response["auth_token"])
-        self.assertTrue(response['auth_token'].access_token_expired())
+        self.assertTrue(response["auth_token"].access_token_expired())
         self.assertEqual(response["response"].status_code, 200)
         self.assertEqual(response["response"].json()["id"], "-20140000010000")
         self.assertEqual(response["response"].json()["resourceType"], "Patient")
@@ -256,6 +280,19 @@ class TestAPI(unittest.TestCase):
         self.assertEqual(response["response"].status_code, 200)
         self.assertEqual(response["response"].json()["sub"], "-20140000010000")
         self.assertEqual(response["response"].json()["patient"], "-20140000010000")
+        self.assertEqual(get_request_mock.call_count, 1)
+
+    @mock.patch(
+        "requests.Session", side_effect=success_fhir_insurance_card_request_mock
+    )
+    def test_successful_fhir_insurance_card_request(self, get_request_mock):
+        bb = BlueButton(config=MOCK_BB_CONFIG)
+        config = generate_mock_config()
+        response = bb.get_insurance_card_data(config)
+        self.assertIsNotNone(response["auth_token"])
+        self.assertEqual(response["response"].status_code, 200)
+        self.assertEqual(response["response"].json()["id"], "ccc-333-333-333-cccc")
+        self.assertEqual(response["response"].json()["resourceType"], "Bundle")
         self.assertEqual(get_request_mock.call_count, 1)
 
     @mock.patch("requests.Session", side_effect=success_fhir_coverage_request_mock)

@@ -331,6 +331,10 @@ def authorization_callback():
 
         profile_data = bb.get_profile_data(config)
         result['profile_data'] = profile_data['response'].json()
+
+        # v3 only: CARIN Digital Insurance Card (C4DIC) FHIR Bundle
+        insurance_card_data = bb.get_insurance_card_data(config)
+        result['insurance_card_data'] = insurance_card_data['response'].json()
     except Exception as ex:
         print(ex)
 
