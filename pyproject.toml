@@ -28,7 +28,7 @@ dependencies = [
     "pyyaml >= 6.0.2",
     "idna >= 3.7",
     "urllib3 >= 1.26.8",
-    "certifi == 2025.1.31"
+    "certifi == 2026.10.19"
 ]
 
 [project.optional-dependencies]
