@@ -120,7 +120,7 @@ pip uninstall cms_bluebutton_sdk
 
 ### Publish Testing using the TestPyPI registry instance
 
-Before publishing to the main PyPI registry, testing can be perfomed using the TestPyPI site.
+Before publishing to the main PyPI registry, testing can be performed using the TestPyPI site.
 
 See the following for more details:  https://packaging.python.org/en/latest/guides/using-testpypi/
 
@@ -295,7 +295,7 @@ python test_bb2_sdk.py
 
        IMPORT TEST SUCCESSFUL!!!
 
-- Remove the test virtual environmnet to clean up.
+- Remove the test virtual environment to clean up.
 
   ```bash
   rm -rf /tmp/test_bb2_venv/
