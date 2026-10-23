@@ -120,7 +120,7 @@ pip uninstall cms_bluebutton_sdk
 
 ### Publish Testing using the TestPyPI registry instance
 
-Before publishing to the main PyPI registry, testing can be perfomed using the TestPyPI site.
+Before publishing to the main PyPI registry, testing can be performed using the TestPyPI site.
 
 See the following for more details:  https://packaging.python.org/en/latest/guides/using-testpypi/
 
@@ -295,7 +295,7 @@ python test_bb2_sdk.py
 
        IMPORT TEST SUCCESSFUL!!!
 
-- Remove the test virtual environmnet to clean up.
+- Remove the test virtual environment to clean up.
 
   ```bash
   rm -rf /tmp/test_bb2_venv/
@@ -352,12 +352,9 @@ The overall goals are to:
       cms-bluebutton-sdk = {file = "./cms_bluebutton_sdk-1.0.4-py3-none-any.whl"}
     ```
 
-    In the base repository of bluebutton-sample-client-python-react, run the following commands. Ensure that you have no currently running containers or images of the sample client.
+    In the base repository of bluebutton-sample-client-python-react, run the following command. Ensure that you have no currently running containers or images of the sample client.
 
     ```
-      cd server
-      unzip -l cms_bluebutton_sdk-1.0.4-py3-none-any.whl
-      pip install cms_bluebutton_sdk-1.0.4-py3-none-any.whl
       docker compose up
     ```
 
